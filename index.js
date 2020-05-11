@@ -6,10 +6,8 @@ var parseString = require('xml2js').parseStringPromise;
 
 (async () => {
     try {
-        console.log(JSON.stringify(github.context));
-
-        const reportPaths = core.getInput('report_paths');
-        console.log(`Going to parse results form ${reportPaths}`)
+        const reportPaths = core.getInput('report_paths') || '**/surefire-reports/TEST-*.xml';
+        core.info(`Going to parse results form ${reportPaths}`)
         const githubToken = core.getInput('github_token');
         
         const globber = await glob.create(reportPaths, {followSymbolicLinks: false});
@@ -18,7 +16,10 @@ var parseString = require('xml2js').parseStringPromise;
         let skipped = 0;
 
         for await (const file of globber.globGenerator()) {
-            console.log(`Parsing file ${file}`);
+            core.info(`Parsing file ${file}`);
+            const repoName = github.context.payload.repository.name;
+            const folder = file.substring(file.lastIndexOf(repoName) + 2, file.lastIndexOf("/target"));
+            core.info(`Going to attribute this file to folder ${folder}`)
             const data = await fs.promises.readFile(file);
             var json = await parseString(data);
         
@@ -30,9 +31,9 @@ var parseString = require('xml2js').parseStringPromise;
                     let failure = testCase.failure[0]['_'];
 
                     annotations.push({
-                        path: `commons-scheduling/src/test/java/${file}.java`,
-                        start_line: 42,
-                        end_line: 42,
+                        path: `${folder}/src/test/java/${file}.java`,
+                        start_line: 1,
+                        end_line: 1,
                         start_column: 0,
                         end_column: 0,
                         annotation_level: 'failure',
@@ -42,11 +43,11 @@ var parseString = require('xml2js').parseStringPromise;
             }
         }
 
-        console.log(annotations);
+        core.info(annotations);
         
         const createCheckRequest = {
             ...github.context.repo,
-            name: 'Report Tests',
+            name: 'Test Report',
             head_sha: github.context.payload.pull_request.head.sha,
             status: 'completed',
             conclusion: annotations.length === 0 ? 'success' : 'failure',
@@ -56,7 +57,7 @@ var parseString = require('xml2js').parseStringPromise;
                 annotations: annotations
             }
         }
-        console.log(createCheckRequest);
+        core.info(createCheckRequest);
 
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
