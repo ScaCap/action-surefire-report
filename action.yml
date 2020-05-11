@@ -8,8 +8,9 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
   report_paths:
-    description: 'surefire xml report path in glob format; the default is **/surefire-reports/TEST-*.xml'
+    description: 'surefire xml report paths in glob format'
     required: false
+    default: '**/surefire-reports/TEST-*.xml'
 runs:
   using: 'node12'
   main: 'dist/index.js'
