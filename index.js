@@ -8,7 +8,7 @@ var parseString = require('xml2js').parseStringPromise;
     try {
         console.log(JSON.stringify(github.context));
 
-        const reportPaths = core.getInput('report_paths');
+        const reportPaths = core.getInput('report_paths') || '**/surefire-reports/TEST-*.xml';
         console.log(`Going to parse results form ${reportPaths}`)
         const githubToken = core.getInput('github_token');
         
