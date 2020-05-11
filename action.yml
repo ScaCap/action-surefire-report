@@ -1,0 +1,15 @@
+name: 'Surefire Report'
+description: 'Report Surefire test results as annotations on Github Pull Request'
+branding:
+  icon: 'edit'
+  color: 'blue'
+inputs:
+  github_token:
+    description: 'GITHUB_TOKEN'
+    required: true
+  report_paths:
+    description: 'surefire xml report path in glob format; the default is **/surefire-reports/*.xml'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
