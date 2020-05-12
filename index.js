@@ -1,49 +1,28 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const glob = require('@actions/glob');
-const fs = require('fs');
-var parseString = require('xml2js').parseStringPromise;
-const { resolveFileAndLine, resolvePath } = require('./utils.js');
+const { parseFile } = require('./utils.js');
 
 (async () => {
     try {
         const reportPaths = core.getInput('report_paths');
-        core.info(`Going to parse results form ${reportPaths}`)
+        core.info(`Going to parse results form ${reportPaths}`);
         const githubToken = core.getInput('github_token');
-        
-        const globber = await glob.create(reportPaths, {followSymbolicLinks: false});
+
+        const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
         let annotations = [];
         let count = 0;
         let skipped = 0;
 
         for await (const file of globber.globGenerator()) {
-            core.debug(`Parsing file ${file}`);
-            const data = await fs.promises.readFile(file);
-            var json = await parseString(data);
-        
-            for (let testCase of json.testsuite.testcase) {
-                count++;
-                if (testCase.skipped) skipped++;
-                if (testCase.failure || testCase.error) {
-                    let message = testCase.failure && testCase.failure[0]['_'] || testCase.error[0]['_'];
-                    let {filename, line} = resolveFileAndLine(message);
-                    const path = await resolvePath(filename);
-                    core.debug(`${path}:line | ${message}`)
-                    annotations.push({
-                        path,
-                        start_line: line,
-                        end_line: line,
-                        start_column: 0,
-                        end_column: 0,
-                        annotation_level: 'failure',
-                        message,
-                    });
-                }
-            }
+            const { count: c, skipped: s, annotations: a } = await parseFile(file);
+            count += c;
+            skipped += s;
+            annotations.concat(a);
         }
 
         core.info(annotations);
-        
+
         const createCheckRequest = {
             ...github.context.repo,
             name: 'Test Report',
@@ -52,15 +31,15 @@ const { resolveFileAndLine, resolvePath } = require('./utils.js');
             conclusion: annotations.length === 0 ? 'success' : 'failure',
             output: {
                 title: `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`,
-                summary: "",
+                summary: '',
                 annotations: annotations
             }
-        }
+        };
         core.info(createCheckRequest);
 
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
-    } catch(error) {
+    } catch (error) {
         core.setFailed(error.message);
     }
 })();
