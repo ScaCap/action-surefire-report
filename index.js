@@ -3,6 +3,7 @@ const github = require('@actions/github');
 const glob = require('@actions/glob');
 const fs = require('fs');
 var parseString = require('xml2js').parseStringPromise;
+const { resolveFileAndLine, resolvePath } = require('./utils.js');
 
 (async () => {
     try {
@@ -16,13 +17,7 @@ var parseString = require('xml2js').parseStringPromise;
         let skipped = 0;
 
         for await (const file of globber.globGenerator()) {
-            core.info(`Parsing file ${file}`);
-            const repoName = github.context.payload.repository.name;
-            const folder = file.substring(
-                file.lastIndexOf(repoName) + repoName.length + 1, 
-                file.lastIndexOf("/target")
-            ) + '/src/test/java';
-            core.info(`Going to attribute this file to folder ${folder}`)
+            core.debug(`Parsing file ${file}`);
             const data = await fs.promises.readFile(file);
             var json = await parseString(data);
         
@@ -30,17 +25,18 @@ var parseString = require('xml2js').parseStringPromise;
                 count++;
                 if (testCase.skipped) skipped++;
                 if (testCase.failure || testCase.error) {
-                    let file = testCase['$'].classname.replace(/$.*/g, '').replace(/\./g, '/');
-                    let failure = testCase.failure && testCase.failure[0]['_'] || testCase.error[0]['_'];
-
+                    let message = testCase.failure && testCase.failure[0]['_'] || testCase.error[0]['_'];
+                    let {filename, line} = resolveFileAndLine(message);
+                    const path = await resolvePath(filename);
+                    core.debug(`${path}:line | ${message}`)
                     annotations.push({
-                        path: `${folder}/${file}.java`,
-                        start_line: 1,
-                        end_line: 1,
+                        path,
+                        start_line: line,
+                        end_line: line,
                         start_column: 0,
                         end_column: 0,
                         annotation_level: 'failure',
-                        message: failure,
+                        message,
                     });
                 }
             }
