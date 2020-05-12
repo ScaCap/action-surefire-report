@@ -18,7 +18,7 @@ const { parseFile } = require('./utils.js');
             const { count: c, skipped: s, annotations: a } = await parseFile(file);
             count += c;
             skipped += s;
-            annotations.concat(a);
+            annotations = annotations.concat(a);
         }
 
         core.info(annotations);
