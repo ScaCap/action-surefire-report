@@ -21,18 +21,25 @@ const { parseFile } = require('./utils.js');
             annotations = annotations.concat(a);
         }
 
-        core.info(annotations);
+        const title = `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
+        core.info(`Result: ${title}`);
+        
+        const prLink = github.context.payload.pull_request.html_url;
+        const conclusion = annotations.length === 0 ? 'success' : 'failure';
+        const status = 'completed';
+        const head_sha = github.context.payload.pull_request.head.sha;
+        core.info(`Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`);
 
         const createCheckRequest = {
             ...github.context.repo,
             name: 'Test Report',
-            head_sha: github.context.payload.pull_request.head.sha,
-            status: 'completed',
-            conclusion: annotations.length === 0 ? 'success' : 'failure',
+            head_sha,
+            status,
+            conclusion,
             output: {
-                title: `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`,
+                title,
                 summary: '',
-                annotations: annotations
+                annotations
             }
         };
         core.info(createCheckRequest);

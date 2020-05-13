@@ -5,7 +5,7 @@ var parseString = require('xml2js').parseStringPromise;
 
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
-    if (!matches) return { file: undefined, line: 1 };
+    if (!matches) return { filename: "unknown", line: 1 };
 
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
@@ -14,17 +14,17 @@ const resolveFileAndLine = output => {
 };
 
 const resolvePath = async filename => {
-    await core.debug(`Resolving path for ${filename}`);
+    core.debug(`Resolving path for ${filename}`);
     const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
     const results = await globber.glob();
-    await core.debug(results);
+    core.debug(results);
     const path = results.length ? results[0].slice(__dirname.length + 1) : filename;
-    await core.debug(`Resolved path: ${path}`);
+    core.debug(`Resolved path: ${path}`);
     return path;
 };
 
 async function parseFile(file) {
-    await core.debug(`Parsing file ${file}`);
+    core.debug(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
     let annotations = [];
@@ -40,7 +40,7 @@ async function parseFile(file) {
                 (testCase.failure && testCase.failure[0]['_']) || testCase.error[0]['_'];
             const { filename, line } = resolveFileAndLine(message);
             const path = await resolvePath(filename);
-            core.debug(`${path}:${line} | ${message}`);
+            core.info(`${path}:${line} | ${message}`);
             annotations.push({
                 path,
                 start_line: line,
