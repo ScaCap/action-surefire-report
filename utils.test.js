@@ -3,35 +3,31 @@ const { resolveFileAndLine, resolvePath, parseFile } = require('./utils.js');
 describe('resolveFileAndLine', () => {
     it('should default to 1 if no line found', () => {
         const { filename, line } = resolveFileAndLine(`not a stacktrace`);
-        expect(filename).toBe("unknown");
+        expect(filename).toBe('unknown');
         expect(line).toBe(1);
     });
 
     it('should parse correctly filename and line for a Java file', () => {
         const { filename, line } = resolveFileAndLine(`
-        InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
-        
-        at EmailAddress.<init>(EmailAddress.java:107)
-        at EmailAddress.of(EmailAddress.java:90)
-        at EmailAddressTest.expectException(EmailAddressTest.java:132)
-        at EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:45)
+action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
+    at action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)
+    at action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)
         `);
         expect(filename).toBe('EmailAddressTest.java');
-        expect(line).toBe(45);
+        expect(line).toBe(39);
     });
 
     it('should parse correctly filename and line for a Kotlin file', () => {
         const { filename, line } = resolveFileAndLine(`
-            java.lang.AssertionError: 
-    
-            Expecting message:
-             <"Wrong message here!">
-            but was:
-             <"This exception is dangerous!">
-            at ExceptionTest.method without proper arguments should fail(ExceptionTest.kt:104)
+java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>
+    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
+Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places
+    at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)
+    at action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)
+    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
         `);
-        expect(filename).toBe('ExceptionTest.kt');
-        expect(line).toBe(104);
+        expect(filename).toBe('CalcUtilsTest.kt');
+        expect(line).toBe(27);
     });
 });
 
