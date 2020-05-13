@@ -40,7 +40,8 @@ async function parseFile(file) {
                 (testCase.failure && testCase.failure[0]['_']) || testCase.error[0]['_'];
             const { filename, line } = resolveFileAndLine(message);
             const path = await resolvePath(filename);
-            core.info(`${path}:${line} | ${message}`);
+            core.info(`${path}:${line} | ${message.trim().split('\n')[0]}`);
+            
             annotations.push({
                 path,
                 start_line: line,
