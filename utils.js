@@ -1,7 +1,7 @@
 const glob = require('@actions/glob');
 const core = require('@actions/core');
 const fs = require('fs');
-var parseString = require('xml2js').parseStringPromise;
+const xml2js = require('xml2js');
 
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
@@ -19,8 +19,8 @@ const resolvePath = async filename => {
     const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
-    core.debug(`__dirname: ${__dirname}`);
-    const path = results.length ? results[0].slice(__dirname.length + 1) : filename;
+    const searchPath = globber.getSearchPaths()[0];
+    const path = results.length ? results[0].slice(searchPath.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
     
     return path;
@@ -33,7 +33,7 @@ async function parseFile(file) {
     let annotations = [];
 
     const data = await fs.promises.readFile(file);
-    const json = await parseString(data);
+    const json = await xml2js.parseStringPromise(data);
 
     for (const testCase of json.testsuite.testcase) {
         count++;
