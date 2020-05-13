@@ -6,10 +6,10 @@ var parseString = require('xml2js').parseStringPromise;
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
     if (!matches) return { filename: "unknown", line: 1 };
-
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
+    
     return { filename, line: parseInt(line) };
 };
 
@@ -18,8 +18,10 @@ const resolvePath = async filename => {
     const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(results);
+    
     const path = results.length ? results[0].slice(__dirname.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
+    
     return path;
 };
 

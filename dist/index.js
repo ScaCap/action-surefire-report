@@ -26117,6 +26117,7 @@ const resolveFileAndLine = output => {
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
+    
     return { filename, line: parseInt(line) };
 };
 
@@ -26125,8 +26126,10 @@ const resolvePath = async filename => {
     const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(results);
+    
     const path = results.length ? results[0].slice(__dirname.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
+    
     return path;
 };
 
@@ -26147,7 +26150,8 @@ async function parseFile(file) {
                 (testCase.failure && testCase.failure[0]['_']) || testCase.error[0]['_'];
             const { filename, line } = resolveFileAndLine(message);
             const path = await resolvePath(filename);
-            core.info(`${path}:${line} | ${message}`);
+            core.info(`${path}:${line} | ${message.trim().split('\n')[0]}`);
+            
             annotations.push({
                 path,
                 start_line: line,
@@ -28748,7 +28752,8 @@ const { parseFile } = __webpack_require__(601);
                 annotations
             }
         };
-        core.info(createCheckRequest);
+        
+        core.debug(JSON.stringify(createCheckRequest, null, 2));
 
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
