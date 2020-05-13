@@ -6,6 +6,7 @@ var parseString = require('xml2js').parseStringPromise;
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
     if (!matches) return { filename: "unknown", line: 1 };
+
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
