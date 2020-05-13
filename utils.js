@@ -18,8 +18,8 @@ const resolvePath = async filename => {
     core.debug(`Resolving path for ${filename}`);
     const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
     const results = await globber.glob();
-    core.debug(results);
-    
+    core.debug(`Matched files: ${results}`);
+    core.debug(`__dirname: ${__dirname}`);
     const path = results.length ? results[0].slice(__dirname.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
     
