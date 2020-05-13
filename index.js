@@ -42,7 +42,8 @@ const { parseFile } = require('./utils.js');
                 annotations
             }
         };
-        core.info(createCheckRequest);
+        
+        core.debug(JSON.stringify(createCheckRequest, null, 2));
 
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
