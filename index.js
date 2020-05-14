@@ -46,6 +46,9 @@ const { parseFile } = require('./utils.js');
         core.debug(JSON.stringify(createCheckRequest, null, 2));
 
         const octokit = new github.GitHub(githubToken);
+        const res = await octokit.checks.listSuitesForRef({...github.context.repo, ref: head_sha});
+        core.info(JSON.stringify(res));
+        
         await octokit.checks.create(createCheckRequest);
     } catch (error) {
         core.setFailed(error.message);
