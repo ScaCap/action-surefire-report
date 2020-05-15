@@ -28717,6 +28717,8 @@ const { parseFile } = __webpack_require__(601);
 
 (async () => {
     try {
+        console.log(JSON.stringify(github.context));
+        
         const reportPaths = core.getInput('report_paths');
         core.info(`Going to parse results form ${reportPaths}`);
         const githubToken = core.getInput('github_token');
