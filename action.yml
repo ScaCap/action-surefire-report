@@ -11,6 +11,10 @@ inputs:
     description: 'surefire xml report paths in glob format'
     required: false
     default: '**/surefire-reports/TEST-*.xml'
+  check_name:
+    description: 'check name for test reports'
+    required: false
+    default: 'Test Report'
 runs:
   using: 'node12'
   main: 'dist/index.js'

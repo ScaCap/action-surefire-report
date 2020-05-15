@@ -28717,11 +28717,10 @@ const { parseFile } = __webpack_require__(601);
 
 (async () => {
     try {
-        console.log(JSON.stringify(github.context));
-        
         const reportPaths = core.getInput('report_paths');
         core.info(`Going to parse results form ${reportPaths}`);
         const githubToken = core.getInput('github_token');
+        const name = core.getInput('check_name');
 
         const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
         let annotations = [];
@@ -28748,7 +28747,7 @@ const { parseFile } = __webpack_require__(601);
 
         const createCheckRequest = {
             ...github.context.repo,
-            name: 'Test Report',
+            name,
             head_sha,
             status,
             conclusion,
@@ -28762,19 +28761,6 @@ const { parseFile } = __webpack_require__(601);
         core.debug(JSON.stringify(createCheckRequest, null, 2));
 
         const octokit = new github.GitHub(githubToken);
-        const res = await octokit.checks.listSuitesForRef({
-            ...github.context.repo,
-            ref: head_sha
-        });
-        core.info(JSON.stringify(res));
-        for (const suite of res.data.check_suites) {
-            const res2 = await octokit.checks.listForSuite({
-                ...github.context.repo,
-                check_suite_id: suite.id
-            });
-            core.info(JSON.stringify(res2));
-        }
-
         await octokit.checks.create(createCheckRequest);
     } catch (error) {
         core.setFailed(error.message);
