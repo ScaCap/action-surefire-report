@@ -21,14 +21,16 @@ const { parseFile } = require('./utils.js');
             annotations = annotations.concat(a);
         }
 
-        const title = `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
+        const title = `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`;
         core.info(`Result: ${title}`);
-        
+
         const prLink = github.context.payload.pull_request.html_url;
         const conclusion = annotations.length === 0 ? 'success' : 'failure';
         const status = 'completed';
         const head_sha = github.context.payload.pull_request.head.sha;
-        core.info(`Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`);
+        core.info(
+            `Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`
+        );
 
         const createCheckRequest = {
             ...github.context.repo,
@@ -42,13 +44,23 @@ const { parseFile } = require('./utils.js');
                 annotations
             }
         };
-        
+
         core.debug(JSON.stringify(createCheckRequest, null, 2));
 
         const octokit = new github.GitHub(githubToken);
-        const res = await octokit.checks.listSuitesForRef({...github.context.repo, ref: head_sha});
+        const res = await octokit.checks.listSuitesForRef({
+            ...github.context.repo,
+            ref: head_sha
+        });
         core.info(JSON.stringify(res));
-        
+        for (const suite of res.data.check_suites) {
+            const res2 = await octokit.checks.listForSuite({
+                ...github.context.repo,
+                check_suite_id: suite.id
+            });
+            core.info(JSON.stringify(res2));
+        }
+
         await octokit.checks.create(createCheckRequest);
     } catch (error) {
         core.setFailed(error.message);
