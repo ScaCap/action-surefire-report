@@ -1,50 +1,31 @@
 name: build
 on:
-    pull_request:
-    push:
-        branches:
-            - master
+  pull_request:
+  push:
+    branches:
+      - master
 
 jobs:
-    maven:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - name: Run maven tests
-              run: cd tests && mvn clean test
-    eslint:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: 12
-            - name: Cache NPM dependencies
-              uses: actions/cache@v1
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.OS }}-npm-cache-
-            - name: npm install
-              run: npm install
-            - name: 'ESLint'
-              run: npm run eslint
-    tests:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v1
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: 12
-            - name: Cache NPM dependencies
-              uses: actions/cache@v1
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.OS }}-npm-cache-
-            - name: npm install
-              run: npm install
-            - name: 'Tests'
-              run: npm run test
+  maven:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-main-maven-
+      - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-npm-cache-
+      - run: npm install
+      - run: npm run eslint 
+      - run: npm run test
