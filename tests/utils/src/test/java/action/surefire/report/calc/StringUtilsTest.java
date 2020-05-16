@@ -21,10 +21,9 @@ public class StringUtilsTest {
     @Test
     public void require_fail() {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Input='' didn't match condition.");
+        thrown.expectMessage("This is unexpected");
         StringUtils.requireNotBlank("");
     }
-
 
     @Test
     public void require_failMsg() {

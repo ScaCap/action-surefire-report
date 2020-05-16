@@ -3,12 +3,13 @@ const core = require('@actions/core');
 const fs = require('fs');
 const xml2js = require('xml2js');
 
-const resolveFileAndLine = output => {
-    const matches = output.match(/\(.*?:\d+\)/g);
-    if (!matches) return { filename: 'unknown', line: 1 };
-
+const resolveFileAndLine = (classname, output) => {
+    const filename = classname.split('.').slice(-1)[0];
+    const matches = output.match(new RegExp(`\\(${filename}.*?:\\d+\\)`, 'g'));
+    if (!matches) return { filename: filename, line: 1 };
+    
     const [lastItem] = matches.slice(-1);
-    const [filename, line] = lastItem.slice(1, -1).split(':');
+    const [, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
 
     return { filename, line: parseInt(line) };
@@ -16,7 +17,7 @@ const resolveFileAndLine = output => {
 
 const resolvePath = async filename => {
     core.debug(`Resolving path for ${filename}`);
-    const globber = await glob.create(`**/${filename}`, { followSymbolicLinks: false });
+    const globber = await glob.create(`**/${filename}.*`, { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
@@ -39,11 +40,13 @@ async function parseFile(file) {
         count++;
         if (testCase.skipped) skipped++;
         if (testCase.failure || testCase.error) {
-            const message =
+            const stackTrace =
                 (testCase.failure && testCase.failure[0]['_']) || testCase.error[0]['_'];
-            const { filename, line } = resolveFileAndLine(message);
+            const message =
+                (testCase.failure && testCase.failure[0]['$'].message) || testCase.error[0]['$'].message;
+            const { filename, line } = resolveFileAndLine(testCase['$'].classname, stackTrace);
             const path = await resolvePath(filename);
-            core.info(`${path}:${line} | ${message.trim().split('\n')[0]}`);
+            core.info(`${path}:${line} | ${stackTrace.trim().split('\n')[0]}`);
 
             annotations.push({
                 path,

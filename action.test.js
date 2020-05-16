@@ -56,12 +56,12 @@ describe('action should work', () => {
             .reply(200, {});
         await action();
         scope.done();
-
+        
         expect(request).toStrictEqual(finishedWithFailures);
     });
 
     it('should send all ok if no tests were broken', async () => {
-        inputs.report_paths = '**/surefire-reports/TEST-*StringUtilsTest.xml';
+        inputs.report_paths = '**/surefire-reports/TEST-*AllOkTest.xml';
         let request = null;
         const scope = nock('https://api.github.com')
             .post('/repos/scacap/action-surefire-report/check-runs', body => {
@@ -71,7 +71,7 @@ describe('action should work', () => {
             .reply(200, {});
         await action();
         scope.done();
-
+        
         expect(request).toStrictEqual(finishedSuccess);
     });
 
