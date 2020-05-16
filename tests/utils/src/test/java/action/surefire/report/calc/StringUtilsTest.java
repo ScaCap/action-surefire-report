@@ -6,6 +6,7 @@ import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class StringUtilsTest {
 
@@ -15,7 +16,7 @@ public class StringUtilsTest {
     @Test
     public void require() {
         final String output = StringUtils.requireNotBlank("hello");
-        assertThat(output, equalTo("hello"));
+        assertTrue(output.equals("wrong"));
     }
 
     @Test

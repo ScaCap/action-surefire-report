@@ -26114,7 +26114,7 @@ const resolveFileAndLine = (classname, output) => {
     const filename = classname.split('.').slice(-1)[0];
     const matches = output.match(new RegExp(`\\(${filename}.*?:\\d+\\)`, 'g'));
     if (!matches) return { filename: filename, line: 1 };
-    
+
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
@@ -26148,9 +26148,13 @@ async function parseFile(file) {
         if (testCase.skipped) skipped++;
         if (testCase.failure || testCase.error) {
             const stackTrace =
-                (testCase.failure && testCase.failure[0]['_']) || testCase.error[0]['_'];
+                (testCase.failure && testCase.failure[0]['_']) ||
+                (testCase.error && testCase.error[0]['_']) ||
+                '';
             const message =
-                (testCase.failure && testCase.failure[0]['$'].message) || testCase.error[0]['$'].message;
+                (testCase.failure && testCase.failure[0]['$'].message) ||
+                (testCase.error && testCase.error[0]['$'].message) ||
+                '';
             const { filename, line } = resolveFileAndLine(testCase['$'].classname, stackTrace);
             const path = await resolvePath(filename);
             core.info(`${path}:${line} | ${stackTrace.trim().split('\n')[0]}`);
@@ -26162,7 +26166,7 @@ async function parseFile(file) {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message
+                message: message || stackTrace
             });
         }
     }
