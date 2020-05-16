@@ -4,7 +4,7 @@ const nock = require('nock');
 const action = require('./action');
 const { finishedWithFailures, finishedSuccess, nothingFound } = require('./action.test.fixtures');
 
-jest.setTimeout(10000);
+jest.setTimeout(20000);
 
 let inputs = {};
 
