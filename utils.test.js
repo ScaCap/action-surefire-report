@@ -29,6 +29,25 @@ Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero d
         expect(filename).toBe('CalcUtilsTest');
         expect(line).toBe(27);
     });
+
+    it('should parse correctly filename and line for extended stacktrace', () => {
+        const { filename, line } = resolveFileAndLine('action.surefire.report.calc.StringUtilsTest', `
+java.lang.AssertionError: 
+
+Expected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")
+     but: exception with message a string containing "This is unexpected" message was "Input='' didn't match condition."
+Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condition.
+	at action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:25)
+	at action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:18)
+	at action.surefire.report.calc.StringUtilsTest.require_fail(StringUtilsTest.java:26)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)
+	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
+ `);
+        expect(filename).toBe('StringUtilsTest');
+        expect(line).toBe(26);
+    });
 });
 
 describe('resolvePath', () => {

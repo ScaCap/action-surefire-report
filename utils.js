@@ -47,10 +47,10 @@ async function parseFile(file) {
             const message =
                 (testCase.failure && testCase.failure[0]['$'].message) ||
                 (testCase.error && testCase.error[0]['$'].message) ||
-                '';
+                stackTrace;
             const { filename, line } = resolveFileAndLine(testCase['$'].classname, stackTrace);
             const path = await resolvePath(filename);
-            core.info(`${path}:${line} | ${stackTrace.trim().split('\n')[0]}`);
+            core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
             annotations.push({
                 path,
@@ -59,7 +59,7 @@ async function parseFile(file) {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: message || stackTrace
+                message
             });
         }
     }
