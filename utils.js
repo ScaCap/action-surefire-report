@@ -5,12 +5,12 @@ const xml2js = require('xml2js');
 
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
-    if (!matches) return { filename: "unknown", line: 1 };
+    if (!matches) return { filename: 'unknown', line: 1 };
 
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
-    
+
     return { filename, line: parseInt(line) };
 };
 
@@ -22,7 +22,7 @@ const resolvePath = async filename => {
     const searchPath = globber.getSearchPaths()[0];
     const path = results.length ? results[0].slice(searchPath.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
-    
+
     return path;
 };
 
@@ -44,7 +44,7 @@ async function parseFile(file) {
             const { filename, line } = resolveFileAndLine(message);
             const path = await resolvePath(filename);
             core.info(`${path}:${line} | ${message.trim().split('\n')[0]}`);
-            
+
             annotations.push({
                 path,
                 start_line: line,
@@ -59,4 +59,18 @@ async function parseFile(file) {
     return { count, skipped, annotations };
 }
 
-module.exports = { resolveFileAndLine, resolvePath, parseFile };
+const parseTestReports = async reportPaths => {
+    const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
+    let annotations = [];
+    let count = 0;
+    let skipped = 0;
+    for await (const file of globber.globGenerator()) {
+        const { count: c, skipped: s, annotations: a } = await parseFile(file);
+        count += c;
+        skipped += s;
+        annotations = annotations.concat(a);
+    }
+    return { count, skipped, annotations };
+};
+
+module.exports = { resolveFileAndLine, resolvePath, parseFile, parseTestReports };

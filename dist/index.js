@@ -26114,12 +26114,12 @@ const xml2js = __webpack_require__(610);
 
 const resolveFileAndLine = output => {
     const matches = output.match(/\(.*?:\d+\)/g);
-    if (!matches) return { filename: "unknown", line: 1 };
+    if (!matches) return { filename: 'unknown', line: 1 };
 
     const [lastItem] = matches.slice(-1);
     const [filename, line] = lastItem.slice(1, -1).split(':');
     core.debug(`Resolved file ${filename} and line ${line}`);
-    
+
     return { filename, line: parseInt(line) };
 };
 
@@ -26131,7 +26131,7 @@ const resolvePath = async filename => {
     const searchPath = globber.getSearchPaths()[0];
     const path = results.length ? results[0].slice(searchPath.length + 1) : filename;
     core.debug(`Resolved path: ${path}`);
-    
+
     return path;
 };
 
@@ -26153,7 +26153,7 @@ async function parseFile(file) {
             const { filename, line } = resolveFileAndLine(message);
             const path = await resolvePath(filename);
             core.info(`${path}:${line} | ${message.trim().split('\n')[0]}`);
-            
+
             annotations.push({
                 path,
                 start_line: line,
@@ -26168,7 +26168,21 @@ async function parseFile(file) {
     return { count, skipped, annotations };
 }
 
-module.exports = { resolveFileAndLine, resolvePath, parseFile };
+const parseTestReports = async reportPaths => {
+    const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
+    let annotations = [];
+    let count = 0;
+    let skipped = 0;
+    for await (const file of globber.globGenerator()) {
+        const { count: c, skipped: s, annotations: a } = await parseFile(file);
+        count += c;
+        skipped += s;
+        annotations = annotations.concat(a);
+    }
+    return { count, skipped, annotations };
+};
+
+module.exports = { resolveFileAndLine, resolvePath, parseFile, parseTestReports };
 
 
 /***/ }),
@@ -28711,57 +28725,11 @@ module.exports = opts => {
 /***/ (function(__unusedmodule, __unusedexports, __webpack_require__) {
 
 const core = __webpack_require__(173);
-const github = __webpack_require__(699);
-const glob = __webpack_require__(769);
-const { parseFile } = __webpack_require__(601);
+const action = __webpack_require__(915);
 
 (async () => {
     try {
-        const reportPaths = core.getInput('report_paths');
-        core.info(`Going to parse results form ${reportPaths}`);
-        const githubToken = core.getInput('github_token');
-        const name = core.getInput('check_name');
-
-        const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
-        let annotations = [];
-        let count = 0;
-        let skipped = 0;
-
-        for await (const file of globber.globGenerator()) {
-            const { count: c, skipped: s, annotations: a } = await parseFile(file);
-            count += c;
-            skipped += s;
-            annotations = annotations.concat(a);
-        }
-
-        const title = `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`;
-        core.info(`Result: ${title}`);
-
-        const prLink = github.context.payload.pull_request.html_url;
-        const conclusion = annotations.length === 0 ? 'success' : 'failure';
-        const status = 'completed';
-        const head_sha = github.context.payload.pull_request.head.sha;
-        core.info(
-            `Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`
-        );
-
-        const createCheckRequest = {
-            ...github.context.repo,
-            name,
-            head_sha,
-            status,
-            conclusion,
-            output: {
-                title,
-                summary: '',
-                annotations
-            }
-        };
-
-        core.debug(JSON.stringify(createCheckRequest, null, 2));
-
-        const octokit = new github.GitHub(githubToken);
-        await octokit.checks.create(createCheckRequest);
+        await action();
     } catch (error) {
         core.setFailed(error.message);
     }
@@ -33197,6 +33165,58 @@ function authenticationRequestError(state, error, options) {
       });
     });
 }
+
+
+/***/ }),
+
+/***/ 915:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const core = __webpack_require__(173);
+const github = __webpack_require__(699);
+const { parseTestReports } = __webpack_require__(601);
+
+const action = async () => {
+    const reportPaths = core.getInput('report_paths');
+    core.info(`Going to parse results form ${reportPaths}`);
+    const githubToken = core.getInput('github_token');
+    const name = core.getInput('check_name');
+
+    let { count, skipped, annotations } = await parseTestReports(reportPaths);
+    const foundResults = count > 0 || skipped > 0;
+    const title = foundResults
+        ? `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
+        : 'No test results found!';
+    core.info(`Result: ${title}`);
+
+    const prLink = github.context.payload.pull_request.html_url;
+    const conclusion = foundResults && annotations.length === 0 ? 'success' : 'failure';
+    const status = 'completed';
+    const head_sha = github.context.payload.pull_request.head.sha;
+    core.info(
+        `Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`
+    );
+
+    const createCheckRequest = {
+        ...github.context.repo,
+        name,
+        head_sha,
+        status,
+        conclusion,
+        output: {
+            title,
+            summary: '',
+            annotations
+        }
+    };
+
+    core.debug(JSON.stringify(createCheckRequest, null, 2));
+
+    const octokit = new github.GitHub(githubToken);
+    await octokit.checks.create(createCheckRequest);
+};
+
+module.exports = action;
 
 
 /***/ }),

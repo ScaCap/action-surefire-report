@@ -25,15 +25,17 @@
     "url": "https://github.com/ScaCap/action-surefire-report/issues"
   },
   "dependencies": {
-    "@actions/core": "^1.2.3",
-    "@actions/github": "^2.1.1",
-    "@actions/glob": "^0.1.0",
-    "xml2js": "^0.4.23"
+    "@actions/core": "1.2.4",
+    "@actions/github": "2.2.0",
+    "@actions/glob": "0.1.0",
+    "xml2js": "0.4.23"
   },
   "devDependencies": {
-    "@zeit/ncc": "^0.20.5",
-    "eslint": "^6.3.0",
-    "jest": "^24.9.0",
-    "enzyme": "3.6.0"
+    "@zeit/ncc": "0.22.1",
+    "eslint": "7.0.0",
+    "jest": "26.0.1",
+    "enzyme": "3.11.0",
+    "@octokit/fixtures": "21.0.5",
+    "nock": "12.0.3"
   }
 }

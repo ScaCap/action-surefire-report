@@ -1,4 +1,4 @@
-const { resolveFileAndLine, resolvePath, parseFile } = require('./utils.js');
+const { resolveFileAndLine, resolvePath, parseFile } = require('./utils');
 
 describe('resolveFileAndLine', () => {
     it('should default to 1 if no line found', () => {
