@@ -9,7 +9,8 @@
   "scripts": {
     "eslint": "eslint .",
     "package": "ncc build index.js -o dist",
-    "test": "jest"
+    "test": "jest",
+    "test-ci": "jest --ci --reporters=jest-junit"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,11 @@
   "bugs": {
     "url": "https://github.com/ScaCap/action-surefire-report/issues"
   },
+  "jest-junit": {
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
+  },
   "dependencies": {
     "@actions/core": "1.2.4",
     "@actions/github": "2.2.0",
@@ -31,11 +37,12 @@
     "xml2js": "0.4.23"
   },
   "devDependencies": {
+    "@octokit/fixtures": "21.0.5",
     "@zeit/ncc": "0.22.1",
+    "enzyme": "3.11.0",
     "eslint": "7.0.0",
     "jest": "26.0.1",
-    "enzyme": "3.11.0",
-    "@octokit/fixtures": "21.0.5",
+    "jest-junit": "10.0.0",
     "nock": "12.0.3"
   }
 }

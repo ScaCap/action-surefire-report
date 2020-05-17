@@ -27,5 +27,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-cache-
       - run: npm install
-      - run: npm run eslint 
-      - run: npm run test
+      - run: npm run eslint
+      - run: npm run test-ci
+      - uses: IgnusG/jest-report-action@v2.3.1
+        with: 
+          access-token: ${{ secrets.GITHUB_TOKEN }}

@@ -71,3 +71,4 @@ typings/
 target/
 .idea
 *.iml
+junit.xml
