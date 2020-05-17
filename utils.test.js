@@ -8,30 +8,38 @@ describe('resolveFileAndLine', () => {
     });
 
     it('should parse correctly filename and line for a Java file', () => {
-        const { filename, line } = resolveFileAndLine('action.surefire.report.email.EmailAddressTest', `
+        const { filename, line } = resolveFileAndLine(
+            'action.surefire.report.email.EmailAddressTest',
+            `
 action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
     at action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)
     at action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)
-        `);
+        `
+        );
         expect(filename).toBe('EmailAddressTest');
-        expect(line).toBe(40);
+        expect(line).toBe(39);
     });
 
     it('should parse correctly filename and line for a Kotlin file', () => {
-        const { filename, line } = resolveFileAndLine('action.surefire.report.calc.CalcUtilsTest', `
+        const { filename, line } = resolveFileAndLine(
+            'action.surefire.report.calc.CalcUtilsTest',
+            `
 java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>
     at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
 Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places
     at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)
     at action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)
     at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
-        `);
+        `
+        );
         expect(filename).toBe('CalcUtilsTest');
         expect(line).toBe(27);
     });
 
     it('should parse correctly filename and line for extended stacktrace', () => {
-        const { filename, line } = resolveFileAndLine('action.surefire.report.calc.StringUtilsTest', `
+        const { filename, line } = resolveFileAndLine(
+            'action.surefire.report.calc.StringUtilsTest',
+            `
 java.lang.AssertionError: 
 
 Expected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")
@@ -44,7 +52,8 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
 	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
- `);
+ `
+        );
         expect(filename).toBe('StringUtilsTest');
         expect(line).toBe(26);
     });
@@ -69,6 +78,7 @@ describe('parseFile', () => {
         const { count, skipped, annotations } = await parseFile(
             'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
         );
+
         expect(count).toBe(2);
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
@@ -79,8 +89,11 @@ describe('parseFile', () => {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
+                title: 'test error handling',
                 message:
-                    'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>'
+                    'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>',
+                raw_message:
+                    'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\n'
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
@@ -89,8 +102,10 @@ describe('parseFile', () => {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message:
-                    '\nExpected: <100.10>\n     but: was <100.11>'
+                title: 'test scale',
+                message: '\nExpected: <100.10>\n     but: was <100.11>',
+                raw_message:
+                    'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)\n'
             }
         ]);
     });

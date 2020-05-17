@@ -15,7 +15,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: "Invalid email address 'user@ñandú.com.ar'"
+                title: 'shouldNotContainInternationalizedHostNames',
+                message: "Invalid email address 'user@ñandú.com.ar'",
+                raw_message:
+                    "action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)\n"
             },
             {
                 path:
@@ -25,7 +28,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: "Invalid email address 'Abc\\@def@example.com'"
+                title: 'shouldBeStricterThanRfc2821',
+                message: "Invalid email address 'Abc\\@def@example.com'",
+                raw_message:
+                    "action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'Abc\\@def@example.com'\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldBeStricterThanRfc2821(EmailAddressTest.java:49)\n"
             },
             {
                 path:
@@ -35,7 +41,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: 'Address aba@bab.com should have thrown InvalidEmailAddressException'
+                title: 'shouldBeStricterThanRfc2822',
+                message: 'Address aba@bab.com should have thrown InvalidEmailAddressException',
+                raw_message:
+                    'java.lang.AssertionError: Address aba@bab.com should have thrown InvalidEmailAddressException\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:75)\n\tat action.surefire.report.email.EmailAddressTest.shouldBeStricterThanRfc2822(EmailAddressTest.java:57)\n'
             },
             {
                 path:
@@ -45,7 +54,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: 'Email address must not be null, empty, or blanks'
+                title: 'shouldNotBeBlank',
+                message: 'Email address must not be null, empty, or blanks',
+                raw_message:
+                    'action.surefire.report.email.InvalidEmailAddressException: Email address must not be null, empty, or blanks\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotBeBlank(EmailAddressTest.java:18)\n'
             },
             {
                 path:
@@ -55,7 +67,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: "Invalid email address 'user@host'"
+                title: 'shouldNotContainLocalHosts',
+                message: "Invalid email address 'user@host'",
+                raw_message:
+                    "action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@host'\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotContainLocalHosts(EmailAddressTest.java:32)\n"
             },
             {
                 path:
@@ -65,8 +80,11 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
+                title: 'shouldNotMissComponents',
                 message:
-                    'Address user-without-host@test.com should have thrown InvalidEmailAddressException'
+                    'Address user-without-host@test.com should have thrown InvalidEmailAddressException',
+                raw_message:
+                    'java.lang.AssertionError: Address user-without-host@test.com should have thrown InvalidEmailAddressException\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:75)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotMissComponents(EmailAddressTest.java:25)\n'
             },
             {
                 path:
@@ -76,7 +94,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: "Invalid email address '.user@host.com'"
+                title: 'shouldNotAllowDotsInWeirdPlaces',
+                message: "Invalid email address '.user@host.com'",
+                raw_message:
+                    "action.surefire.report.email.InvalidEmailAddressException: Invalid email address '.user@host.com'\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotAllowDotsInWeirdPlaces(EmailAddressTest.java:66)\n"
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
@@ -85,8 +106,11 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
+                title: 'test error handling',
                 message:
-                    'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>'
+                    'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>',
+                raw_message:
+                    'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\n'
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
@@ -95,7 +119,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message: '\nExpected: <100.10>\n     but: was <100.11>'
+                title: 'test scale',
+                message: '\nExpected: <100.10>\n     but: was <100.11>',
+                raw_message:
+                    'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)\n'
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
@@ -104,8 +131,11 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
+                title: 'require_fail',
                 message:
-                    '\nExpected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")\n     but: exception with message a string containing "This is unexpected" message was "Input=\'\' didn\'t match condition."\nStacktrace was: java.lang.IllegalArgumentException: Input=\'\' didn\'t match condition.\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:25)\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:18)\n\tat action.surefire.report.calc.StringUtilsTest.require_fail(StringUtilsTest.java:26)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.rules.ExpectedException$ExpectedExceptionStatement.evaluate(ExpectedException.java:258)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:365)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:273)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:238)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)\n\tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:384)\n\tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)\n\tat org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)\n\tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)\n'
+                    '\nExpected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")\n     but: exception with message a string containing "This is unexpected" message was "Input=\'\' didn\'t match condition."\nStacktrace was: java.lang.IllegalArgumentException: Input=\'\' didn\'t match condition.\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:25)\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:18)\n\tat action.surefire.report.calc.StringUtilsTest.require_fail(StringUtilsTest.java:26)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.rules.ExpectedException$ExpectedExceptionStatement.evaluate(ExpectedException.java:258)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:365)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:273)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:238)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)\n\tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:384)\n\tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)\n\tat org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)\n\tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)\n',
+                raw_message:
+                    'java.lang.AssertionError: \n\nExpected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")\n     but: exception with message a string containing "This is unexpected" message was "Input=\'\' didn\'t match condition."\nStacktrace was: java.lang.IllegalArgumentException: Input=\'\' didn\'t match condition.\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:25)\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:18)\n\tat action.surefire.report.calc.StringUtilsTest.require_fail(StringUtilsTest.java:26)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.rules.ExpectedException$ExpectedExceptionStatement.evaluate(ExpectedException.java:258)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:365)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:273)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:238)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)\n\tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:384)\n\tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)\n\tat org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)\n\tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)\n\n'
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
@@ -114,7 +144,10 @@ const finishedWithFailures = {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
+                title: 'require',
                 message:
+                    'java.lang.AssertionError\n\tat action.surefire.report.calc.StringUtilsTest.require(StringUtilsTest.java:19)',
+                raw_message:
                     'java.lang.AssertionError\n\tat action.surefire.report.calc.StringUtilsTest.require(StringUtilsTest.java:19)\n'
             }
         ]

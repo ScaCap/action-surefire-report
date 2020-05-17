@@ -56,7 +56,7 @@ describe('action should work', () => {
             .reply(200, {});
         await action();
         scope.done();
-        
+
         expect(request).toStrictEqual(finishedWithFailures);
     });
 
@@ -71,7 +71,7 @@ describe('action should work', () => {
             .reply(200, {});
         await action();
         scope.done();
-        
+
         expect(request).toStrictEqual(finishedSuccess);
     });
 
