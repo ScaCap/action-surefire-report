@@ -17,6 +17,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
+      - uses: scacap/action-surefire-report@road-to-v1-3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Example Test Report
       - uses: actions/setup-node@v1
         with:
           node-version: 12
@@ -28,9 +32,4 @@ jobs:
             ${{ runner.os }}-npm-cache-
       - run: npm install
       - run: npm run eslint
-      - run: npm run test-ci
-        continue-on-error: true
-      - uses: IgnusG/jest-report-action@v2.3.1
-        with: 
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-          run-name: build
+      - run: npm run test
