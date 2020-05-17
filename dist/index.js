@@ -26147,7 +26147,6 @@ async function parseFile(file) {
         count++;
         if (testCase.skipped) skipped++;
         if (testCase.failure || testCase.error) {
-            const title = testCase['$'].name;
             const stackTrace =
                 (testCase.failure && testCase.failure[0]['_']) ||
                 (testCase.error && testCase.error[0]['_']) ||
@@ -26159,6 +26158,7 @@ async function parseFile(file) {
 
             const { filename, line } = resolveFileAndLine(testCase['$'].classname, stackTrace);
             const path = await resolvePath(filename);
+            const title = `${filename}.${testCase['$'].name}`;
             core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
             annotations.push({
@@ -26170,7 +26170,7 @@ async function parseFile(file) {
                 annotation_level: 'failure',
                 title,
                 message,
-                raw_message: stackTrace
+                raw_details: stackTrace
             });
         }
     }

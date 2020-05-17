@@ -89,10 +89,10 @@ describe('parseFile', () => {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                title: 'test error handling',
+                title: 'CalcUtilsTest.test error handling',
                 message:
                     'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>',
-                raw_message:
+                raw_details:
                     'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\n'
             },
             {
@@ -102,9 +102,9 @@ describe('parseFile', () => {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                title: 'test scale',
+                title: 'CalcUtilsTest.test scale',
                 message: '\nExpected: <100.10>\n     but: was <100.11>',
-                raw_message:
+                raw_details:
                     'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)\n'
             }
         ]);
