@@ -1,5 +1,6 @@
 package action.surefire.report.calc;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -33,6 +34,7 @@ public class StringUtilsTest {
         StringUtils.requireNotBlank("", "I really need that input");
     }
 
+    @Ignore
     @Test
     public void require_fail_null() {
         thrown.expect(IllegalArgumentException.class);
