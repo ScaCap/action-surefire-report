@@ -26166,7 +26166,9 @@ async function parseFile(file) {
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                message
+                // title,
+                message,
+                // raw_details
             });
         }
     }

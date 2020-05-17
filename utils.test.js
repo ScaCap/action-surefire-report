@@ -14,7 +14,7 @@ action.surefire.report.email.InvalidEmailAddressException: Invalid email address
     at action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)
         `);
         expect(filename).toBe('EmailAddressTest');
-        expect(line).toBe(39);
+        expect(line).toBe(40);
     });
 
     it('should parse correctly filename and line for a Kotlin file', () => {
