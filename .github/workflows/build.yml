@@ -20,7 +20,7 @@ jobs:
       - uses: scacap/action-surefire-report@road-to-v1-3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Example Test Report (should fail)
+          check_name: Example Test Report
       - uses: actions/setup-node@v1
         with:
           node-version: 12
