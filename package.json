@@ -34,7 +34,7 @@
     "@actions/core": "1.2.4",
     "@actions/github": "2.2.0",
     "@actions/glob": "0.1.0",
-    "xml2js": "0.4.23"
+    "xml2json": "0.12.0"
   },
   "devDependencies": {
     "@octokit/fixtures": "21.0.5",

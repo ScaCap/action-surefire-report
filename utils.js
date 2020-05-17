@@ -1,7 +1,7 @@
 const glob = require('@actions/glob');
 const core = require('@actions/core');
 const fs = require('fs');
-const xml2js = require('xml2js');
+const parser = require('xml2json');
 
 const resolveFileAndLine = (classname, output) => {
     const filename = classname.split('.').slice(-1)[0];
@@ -34,24 +34,26 @@ async function parseFile(file) {
     let annotations = [];
 
     const data = await fs.promises.readFile(file);
-    const json = await xml2js.parseStringPromise(data);
+    const testsuite = JSON.parse(parser.toJson(data)).testsuite;
 
-    for (const testCase of json.testsuite.testcase) {
+    const testcases = Array.isArray(testsuite.testcase) ? testsuite.testcase : [testsuite.testcase];
+
+    for (const testcase of testcases) {
         count++;
-        if (testCase.skipped) skipped++;
-        if (testCase.failure || testCase.error) {
+        if (testcase.skipped) skipped++;
+        if (testcase.failure || testcase.error) {
             const stackTrace =
-                (testCase.failure && testCase.failure[0]['_']) ||
-                (testCase.error && testCase.error[0]['_']) ||
+                (testcase.failure && testcase.failure['$t']) ||
+                (testcase.error && testcase.error['$t']) ||
                 '';
             const message =
-                (testCase.failure && testCase.failure[0]['$'].message) ||
-                (testCase.error && testCase.error[0]['$'].message) ||
+                (testcase.failure && testcase.failure.message) ||
+                (testcase.error && testcase.error.message) ||
                 stackTrace.split('\n').slice(0, 2).join('\n');
 
-            const { filename, line } = resolveFileAndLine(testCase['$'].classname, stackTrace);
+            const { filename, line } = resolveFileAndLine(testcase.classname, stackTrace);
             const path = await resolvePath(filename);
-            const title = `${filename}.${testCase['$'].name}`;
+            const title = `${filename}.${testcase.name}`;
             core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
             annotations.push({
