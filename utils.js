@@ -1,7 +1,7 @@
 const glob = require('@actions/glob');
 const core = require('@actions/core');
 const fs = require('fs');
-const parser = require('xml2json');
+const parser = require('xml-js');
 
 const resolveFileAndLine = (classname, output) => {
     const filename = classname.split('.').slice(-1)[0];
@@ -34,7 +34,7 @@ async function parseFile(file) {
     let annotations = [];
 
     const data = await fs.promises.readFile(file);
-    const testsuite = JSON.parse(parser.toJson(data)).testsuite;
+    const testsuite = JSON.parse(parser.xml2json(data, { compact: true })).testsuite;
 
     const testcases = Array.isArray(testsuite.testcase) ? testsuite.testcase : [testsuite.testcase];
 
@@ -42,18 +42,27 @@ async function parseFile(file) {
         count++;
         if (testcase.skipped) skipped++;
         if (testcase.failure || testcase.error) {
-            const stackTrace =
-                (testcase.failure && testcase.failure['$t']) ||
-                (testcase.error && testcase.error['$t']) ||
-                '';
-            const message =
-                (testcase.failure && testcase.failure.message) ||
-                (testcase.error && testcase.error.message) ||
-                stackTrace.split('\n').slice(0, 2).join('\n');
+            const stackTrace = (
+                (testcase.failure && testcase.failure._cdata) ||
+                (testcase.failure && testcase.failure._text) ||
+                (testcase.error && testcase.error._cdata) ||
+                (testcase.error && testcase.error._text) ||
+                ''
+            ).trim();
 
-            const { filename, line } = resolveFileAndLine(testcase.classname, stackTrace);
+            const message = (
+                (testcase.failure && testcase.failure._attributes.message) ||
+                (testcase.error && testcase.error._attributes.message) ||
+                stackTrace.split('\n').slice(0, 2).join('\n')
+            ).trim();
+
+            const { filename, line } = resolveFileAndLine(
+                testcase._attributes.classname,
+                stackTrace
+            );
+
             const path = await resolvePath(filename);
-            const title = `${filename}.${testcase.name}`;
+            const title = `${filename}.${testcase._attributes.name}`;
             core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
             annotations.push({

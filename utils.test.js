@@ -103,7 +103,7 @@ describe('parseFile', () => {
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'CalcUtilsTest.test scale',
-                message: '\nExpected: <100.10>\n     but: was <100.11>',
+                message: 'Expected: <100.10>\n     but: was <100.11>',
                 raw_details:
                     'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)'
             }

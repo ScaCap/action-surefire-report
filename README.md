@@ -1,6 +1,6 @@
 # GitHub Action: Process maven surefire reports
 
-This action processes maven surefire or failsafe XML reports on pull requests and shows the result as PR check with annotations.
+This action processes maven surefire or failsafe XML reports on pull requests and shows the result as a PR check with summary and annotations.
 
 ![Screenshot](./screenshot.png)
 
@@ -8,7 +8,7 @@ This action processes maven surefire or failsafe XML reports on pull requests an
 
 ### `github_token`
 
-**Required**. Must be in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`.
+**Required**. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`.
 
 ### `report_paths`
 
