@@ -33,3 +33,4 @@ jobs:
       - uses: IgnusG/jest-report-action@v2.3.1
         with: 
           access-token: ${{ secrets.GITHUB_TOKEN }}
+          run-name: build
