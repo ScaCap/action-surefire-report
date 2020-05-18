@@ -29741,7 +29741,6 @@ const action = async () => {
     const name = core.getInput('check_name');
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths);
-    annotations = annotations.length > 50 ? annotations.slice(0, 50) : annotations;
     const foundResults = count > 0 || skipped > 0;
     const title = foundResults
         ? `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
@@ -29765,7 +29764,7 @@ const action = async () => {
         output: {
             title,
             summary: '',
-            annotations
+            annotations: annotations.slice(0, 50)
         }
     };
 
