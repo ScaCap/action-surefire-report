@@ -1,5 +1,8 @@
 # GitHub Action: Process maven surefire reports
 
+![](https://github.com/scacap/action-surefire-report/workflows/build/badge.svg)
+
+
 This action processes maven surefire or failsafe XML reports on pull requests and shows the result as a PR check with summary and annotations.
 
 ![Screenshot](./screenshot.png)
