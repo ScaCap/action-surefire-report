@@ -2,16 +2,47 @@
   "name": "action-surefire-report",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
-  "scripts": {},
+  "author": "Scalable Capital",
+  "license": "Apache-2.0",
+  "main": "index.js",
+  "homepage": "https://github.com/ScaCap/action-surefire-report#readme",
+  "scripts": {
+    "eslint": "eslint .",
+    "package": "ncc build index.js -o dist",
+    "test": "jest",
+    "test-ci": "jest --ci --reporters=jest-junit"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ScaCap/action-surefire-report"
   },
+  "keywords": [
+    "GitHub",
+    "Actions",
+    "Junit",
+    "Surefire"
+  ],
+  "bugs": {
+    "url": "https://github.com/ScaCap/action-surefire-report/issues"
+  },
+  "jest-junit": {
+    "suiteNameTemplate": "{filepath}",
+    "classNameTemplate": "{classname}",
+    "titleTemplate": "{title}"
+  },
   "dependencies": {
-    "@actions/core": "^1.2.3",
-    "@actions/github": "^2.1.1",
-    "@actions/glob": "^0.1.0",
-    "xml2js": "^0.4.23"
+    "@actions/core": "1.2.4",
+    "@actions/github": "2.2.0",
+    "@actions/glob": "0.1.0",
+    "xml-js": "1.6.11"
+  },
+  "devDependencies": {
+    "@octokit/fixtures": "21.0.5",
+    "@zeit/ncc": "0.22.1",
+    "enzyme": "3.11.0",
+    "eslint": "7.0.0",
+    "jest": "26.0.1",
+    "jest-junit": "10.0.0",
+    "nock": "12.0.3"
   }
 }

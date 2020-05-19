@@ -1,0 +1,35 @@
+name: build
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-main-maven-
+      - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
+      - uses: scacap/action-surefire-report@road-to-v1-3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Example Test Report
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-cache-
+      - run: npm install
+      - run: npm run eslint
+      - run: npm run test
