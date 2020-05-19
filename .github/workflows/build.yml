@@ -17,7 +17,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@road-to-v1-3
+      - uses: scacap/action-surefire-report@master
+        if: endsWith(github.ref, 'master') == false
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Example Test Report
