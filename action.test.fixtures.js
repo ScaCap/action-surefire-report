@@ -166,6 +166,18 @@ const finishedSuccess = {
     }
 };
 
+const masterSuccess = {
+    name: 'Test Report',
+    head_sha: 'masterSha123',
+    status: 'completed',
+    conclusion: 'success',
+    output: {
+        title: '1 tests run, 0 skipped, 0 failed.',
+        summary: '',
+        annotations: []
+    }
+};
+
 const nothingFound = {
     name: 'Test Report',
     head_sha: 'sha123',
@@ -178,4 +190,4 @@ const nothingFound = {
     }
 };
 
-module.exports = { finishedWithFailures, finishedSuccess, nothingFound };
+module.exports = { finishedWithFailures, finishedSuccess, nothingFound, masterSuccess };

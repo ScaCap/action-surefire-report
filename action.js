@@ -15,12 +15,13 @@ const action = async () => {
         : 'No test results found!';
     core.info(`Result: ${title}`);
 
-    const prLink = github.context.payload.pull_request.html_url;
+    const pullRequest = github.context.payload.pull_request;
+    const link = pullRequest && pullRequest.html_url || github.context.ref;
     const conclusion = foundResults && annotations.length === 0 ? 'success' : 'failure';
     const status = 'completed';
-    const head_sha = github.context.payload.pull_request.head.sha;
+    const head_sha = pullRequest && pullRequest.head.sha || github.context.sha;
     core.info(
-        `Posting status '${status}' with conclusion '${conclusion}' to ${prLink} (sha: ${head_sha})`
+        `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
     );
 
     const createCheckRequest = {

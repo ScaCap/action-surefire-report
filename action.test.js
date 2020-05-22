@@ -2,7 +2,12 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const nock = require('nock');
 const action = require('./action');
-const { finishedWithFailures, finishedSuccess, nothingFound } = require('./action.test.fixtures');
+const {
+    finishedWithFailures,
+    finishedSuccess,
+    nothingFound,
+    masterSuccess
+} = require('./action.test.fixtures');
 
 jest.setTimeout(20000);
 
@@ -88,5 +93,24 @@ describe('action should work', () => {
         scope.done();
 
         expect(request).toStrictEqual(nothingFound);
+    });
+
+    it('should send reports to sha if no pr detected', async () => {
+        inputs.report_paths = '**/surefire-reports/TEST-*AllOkTest.xml';
+        github.context.payload.pull_request = undefined;
+        github.context.sha = 'masterSha123';
+        github.context.ref = 'refs/heads/master';
+
+        let request = null;
+        const scope = nock('https://api.github.com')
+            .post('/repos/scacap/action-surefire-report/check-runs', body => {
+                request = body;
+                return body;
+            })
+            .reply(200, {});
+        await action();
+        scope.done();
+
+        expect(request).toStrictEqual(masterSuccess);
     });
 });
