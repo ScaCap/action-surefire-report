@@ -1,8 +1,8 @@
 name: 'Surefire Report'
-description: 'Report Surefire test results as annotations on Github Pull Request'
+description: 'Report Surefire test results as annotations on Github Pull Request [junit, failsafe]'
 branding:
-  icon: 'edit'
-  color: 'blue'
+  icon: 'check-square'
+  color: 'green'
 inputs:
   github_token:
     description: 'GITHUB_TOKEN'
