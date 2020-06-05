@@ -34,12 +34,13 @@ async function parseFile(file) {
     let annotations = [];
 
     const data = await fs.promises.readFile(file);
+
     const report = JSON.parse(parser.xml2json(data, { compact: true }));
+    const testsuites = report.testsuite ? [report.testsuite] : Array.isArray(report.testsuites.testsuite) ? report.testsuites.testsuite : [report.testsuites.testsuite];
 
-    const testsuites = report.testsuite ? [report.testsuite] : report.testsuites || [];
-
-    for(const testsuite of testsuites) {
+    for (const testsuite of testsuites) {
         const testcases = Array.isArray(testsuite.testcase) ? testsuite.testcase : [testsuite.testcase];
+
         for (const testcase of testcases) {
             count++;
             if (testcase.skipped) skipped++;
