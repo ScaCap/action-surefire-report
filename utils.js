@@ -39,8 +39,7 @@ async function parseFile(file) {
     const testsuites = report.testsuite ? [report.testsuite] : Array.isArray(report.testsuites.testsuite) ? report.testsuites.testsuite : [report.testsuites.testsuite];
 
     for (const testsuite of testsuites) {
-        const testcases = Array.isArray(testsuite.testcase) ? testsuite.testcase : [testsuite.testcase];
-
+        const testcases = Array.isArray(testsuite.testcase) ? testsuite.testcase : testsuite.testcase ? [testsuite.testcase] : [];
         for (const testcase of testcases) {
             count++;
             if (testcase.skipped) skipped++;
