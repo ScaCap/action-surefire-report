@@ -22,24 +22,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Example Surefire Test Report
-      - uses: actions/setup-python@v1
+      - uses: cclauss/GitHub-Action-for-pytest@master
         with:
-          python-version: '3.7'
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('Pipfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
-      - run: |
-          sudo apt-get update
-          sudo apt-get install python3-dev build-essential
-          python -m pip install --upgrade pip setuptools wheel pipenv
-          pipenv install --dev
-      - run: |
-          cd pytests
-          pipenv run pytest
+          args: cd pytests && pytest test.py
       - uses: scacap/action-surefire-report@junit-reports-pytests
         if: endsWith(github.ref, 'master') == false
         with:
