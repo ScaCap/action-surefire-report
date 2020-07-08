@@ -17,23 +17,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@master
+      - uses: scacap/action-surefire-report@junit-reports-pytests
         if: endsWith(github.ref, 'master') == false
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Example Test Report
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
-      - run: npm install
-      - run: npm run eslint
-      - run: npm run test
+          check_name: Example Surefire Test Report
       - uses: actions/setup-python@v1
         with:
           python-version: '3.7'
@@ -49,4 +37,23 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel pipenv
           pipenv install --dev
       - run: |
+          cd pytests
           pipenv run pytest
+      - uses: scacap/action-surefire-report@junit-reports-pytests
+        if: endsWith(github.ref, 'master') == false
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Example Pytest Report
+          report_paths: pytests/report.xml
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-cache-
+      - run: npm install
+      - run: npm run eslint
+      - run: npm run test
