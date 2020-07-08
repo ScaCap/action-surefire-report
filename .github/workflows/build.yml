@@ -34,3 +34,19 @@ jobs:
       - run: npm install
       - run: npm run eslint
       - run: npm run test
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.7'
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('Pipfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            ${{ runner.os }}-
+      - run: |
+          sudo apt-get install python3-dev
+          python -m pip install --upgrade pip setuptools wheel pipenv
+          pipenv install --dev
+      - run: |
+          pipenv run pytest

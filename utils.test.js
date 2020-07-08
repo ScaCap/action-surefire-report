@@ -2,13 +2,14 @@ const { resolveFileAndLine, resolvePath, parseFile } = require('./utils');
 
 describe('resolveFileAndLine', () => {
     it('should default to 1 if no line found', () => {
-        const { filename, line } = resolveFileAndLine('someClassName', 'not a stacktrace');
+        const { filename, line } = resolveFileAndLine(null, 'someClassName', 'not a stacktrace');
         expect(filename).toBe('someClassName');
         expect(line).toBe(1);
     });
 
     it('should parse correctly filename and line for a Java file', () => {
         const { filename, line } = resolveFileAndLine(
+            null,
             'action.surefire.report.email.EmailAddressTest',
             `
 action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
@@ -22,6 +23,7 @@ action.surefire.report.email.InvalidEmailAddressException: Invalid email address
 
     it('should parse correctly filename and line for a Kotlin file', () => {
         const { filename, line } = resolveFileAndLine(
+            null,
             'action.surefire.report.calc.CalcUtilsTest',
             `
 java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>
@@ -38,6 +40,7 @@ Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero d
 
     it('should parse correctly filename and line for extended stacktrace', () => {
         const { filename, line } = resolveFileAndLine(
+            null,
             'action.surefire.report.calc.StringUtilsTest',
             `
 java.lang.AssertionError: 
@@ -52,10 +55,28 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
 	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
- `
+`
         );
         expect(filename).toBe('StringUtilsTest');
         expect(line).toBe(26);
+    });
+
+    it('should parse correctly filename and line for pytest', () => {
+        const { filename, line } = resolveFileAndLine(
+            'test.py',
+            'anything',
+            `
+def
+test_with_error():
+event = { &apos;attr&apos;: &apos;test&apos;}
+&gt; assert event.attr == &apos;test&apos;
+E AttributeError: &apos;dict&apos; object has no attribute &apos;attr&apos;
+
+test.py:14: AttributeError
+`
+        );
+        expect(filename).toBe('test.py');
+        expect(line).toBe(14);
     });
 });
 
@@ -106,6 +127,38 @@ describe('parseFile', () => {
                 message: 'Expected: <100.10>\n     but: was <100.11>',
                 raw_details:
                     'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)'
+            }
+        ]);
+    });
+    it('should parse pytest results', async () => {
+        const { count, skipped, annotations } = await parseFile('pytests/report.xml');
+
+        expect(count).toBe(3);
+        expect(skipped).toBe(0);
+        expect(annotations).toStrictEqual([
+            {
+                path: 'test.py',
+                start_line: 10,
+                end_line: 10,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'test.py.test_which_fails',
+                message: "AssertionError: assert 'test' == 'xyz'\n  - xyz\n  + test",
+                raw_details:
+                    "def test_which_fails():\n                event = { 'attr': 'test'}\n                > assert event['attr'] == 'xyz'\n                E AssertionError: assert 'test' == 'xyz'\n                E - xyz\n                E + test\n\n                test.py:10: AssertionError"
+            },
+            {
+                path: 'test.py',
+                start_line: 14,
+                end_line: 14,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'test.py.test_with_error',
+                message: "AttributeError: 'dict' object has no attribute 'attr'",
+                raw_details:
+                    "def\n                test_with_error():\n                event = { 'attr': 'test'}\n                > assert event.attr == 'test'\n                E AttributeError: 'dict' object has no attribute 'attr'\n\n                test.py:14: AttributeError"
             }
         ]);
     });
