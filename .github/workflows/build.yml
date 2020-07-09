@@ -17,11 +17,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@master
+      - uses: scacap/action-surefire-report@junit-reports-pytests
         if: endsWith(github.ref, 'master') == false
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Example Test Report
+          check_name: Example Surefire Test Report
+      - uses: cclauss/GitHub-Action-for-pytest@0.5.0
+        with:
+          args: pytest --junit-xml=python/report.xml python/ || exit 0
+      - uses: scacap/action-surefire-report@junit-reports-pytests
+        if: endsWith(github.ref, 'master') == false
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Example Pytest Report
+          report_paths: python/report.xml
       - uses: actions/setup-node@v1
         with:
           node-version: 12
