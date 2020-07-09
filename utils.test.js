@@ -109,4 +109,24 @@ describe('parseFile', () => {
             }
         ]);
     });
+
+    it('should parse empty results', async () => {
+        const { count, skipped, annotations } = await parseFile(
+            'tests/empty/surefire-reports/TEST-action.surefire.report.empty.EmptyTest.xml'
+        );
+
+        expect(count).toBe(0);
+        expect(skipped).toBe(0);
+        expect(annotations).toStrictEqual([]);
+    });
+
+    it('should parse empty file', async () => {
+        const { count, skipped, annotations } = await parseFile(
+            'tests/empty/surefire-reports/TEST-action.surefire.report.empty.EmptyFile.xml'
+        );
+
+        expect(count).toBe(0);
+        expect(skipped).toBe(0);
+        expect(annotations).toStrictEqual([]);
+    });
 });
