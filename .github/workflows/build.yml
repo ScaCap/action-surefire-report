@@ -22,9 +22,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           check_name: Example Surefire Test Report
-      - uses: cclauss/GitHub-Action-for-pytest@master
+      - uses: cclauss/GitHub-Action-for-pytest@0.5.0doc
         with:
-          args: cd pytests && pytest --junit-xml=report.xml test.py || exit 0
+          args: pytest --junit-xml=python/report.xml python/ || exit 0
       - uses: scacap/action-surefire-report@junit-reports-pytests
         if: endsWith(github.ref, 'master') == false
         with:

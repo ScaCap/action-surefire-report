@@ -68,9 +68,9 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
             `
 def
 test_with_error():
-event = { &apos;attr&apos;: &apos;test&apos;}
-&gt; assert event.attr == &apos;test&apos;
-E AttributeError: &apos;dict&apos; object has no attribute &apos;attr&apos;
+event = { 'attr': 'test'}
+&gt; assert event.attr == 'test'
+E AttributeError: 'dict' object has no attribute 'attr'
 
 test.py:14: AttributeError
 `
@@ -131,34 +131,34 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse pytest results', async () => {
-        const { count, skipped, annotations } = await parseFile('pytests/report.xml');
+        const { count, skipped, annotations } = await parseFile('python/report.xml');
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
             {
-                path: 'test.py',
+                path: 'python/test_sample.py',
                 start_line: 10,
                 end_line: 10,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                title: 'test.py.test_which_fails',
+                title: 'python/test_sample.py.test_which_fails',
                 message: "AssertionError: assert 'test' == 'xyz'\n  - xyz\n  + test",
                 raw_details:
-                    "def test_which_fails():\n                event = { 'attr': 'test'}\n                > assert event['attr'] == 'xyz'\n                E AssertionError: assert 'test' == 'xyz'\n                E - xyz\n                E + test\n\n                test.py:10: AssertionError"
+                    "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError"
             },
             {
-                path: 'test.py',
+                path: 'python/test_sample.py',
                 start_line: 14,
                 end_line: 14,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
-                title: 'test.py.test_with_error',
+                title: 'python/test_sample.py.test_with_error',
                 message: "AttributeError: 'dict' object has no attribute 'attr'",
                 raw_details:
-                    "def\n                test_with_error():\n                event = { 'attr': 'test'}\n                > assert event.attr == 'test'\n                E AttributeError: 'dict' object has no attribute 'attr'\n\n                test.py:14: AttributeError"
+                    "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\npython/test_sample.py:14: AttributeError"
             }
         ]);
     });
