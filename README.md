@@ -42,3 +42,14 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
+
+## Tips for Gradle
+
+Use junit report inside test block of gradle config:
+```
+reports {
+  junitXml.isEnabled = true
+}
+```
+
+and set `report_paths: '**/build/test-results/test/TEST-*.xml'`
