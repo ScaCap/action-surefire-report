@@ -7,6 +7,7 @@ const action = async () => {
     core.info(`Going to parse results form ${reportPaths}`);
     const githubToken = core.getInput('github_token');
     const name = core.getInput('check_name');
+    const commit = core.getInput('commit');
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths);
     const foundResults = count > 0 || skipped > 0;
@@ -19,7 +20,7 @@ const action = async () => {
     const link = pullRequest && pullRequest.html_url || github.context.ref;
     const conclusion = foundResults && annotations.length === 0 ? 'success' : 'failure';
     const status = 'completed';
-    const head_sha = pullRequest && pullRequest.head.sha || github.context.sha;
+    const head_sha = commit || pullRequest && pullRequest.head.sha || github.context.sha;
     core.info(
         `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
     );
