@@ -57,21 +57,10 @@ As Gradle uses a different build directory than Maven by default, you might need
 
 You also need to enable JUnit XML reports as shown below.
 
-#### JUnit 4
-
-```groovy
-test {
-  reports {
-    junitXml.isEnabled = true
-  }
-}
-```
-
-#### JUnit 5
-
 ```groovy
 test {
   reports {
     junitXml.enabled( true )
   }
+}
 ```
