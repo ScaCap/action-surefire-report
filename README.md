@@ -49,11 +49,29 @@ jobs:
 
 ## Tips for Gradle
 
-Use junit report inside test block of gradle config:
+As Gradle uses a different build directory than Maven by default, you might need to set the `report_paths` variable:
+
+```yaml
+    `report_paths: '**/build/test-results/test/TEST-*.xml'`
 ```
-reports {
-  junitXml.isEnabled = true
+
+You also need to enable JUnit XML reports as shown below.
+
+#### JUnit 4
+
+```groovy
+test {
+  reports {
+    junitXml.isEnabled = true
+  }
 }
 ```
 
-and set `report_paths: '**/build/test-results/test/TEST-*.xml'`
+#### JUnit 5
+
+```groovy
+test {
+  reports {
+    junitXml.enabled( true )
+  }
+```
