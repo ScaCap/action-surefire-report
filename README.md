@@ -52,7 +52,7 @@ jobs:
 As Gradle uses a different build directory than Maven by default, you might need to set the `report_paths` variable:
 
 ```yaml
-    `report_paths: '**/build/test-results/test/TEST-*.xml'`
+    report_paths: '**/build/test-results/test/TEST-*.xml'
 ```
 
 You also need to enable JUnit XML reports as shown below.
@@ -60,7 +60,7 @@ You also need to enable JUnit XML reports as shown below.
 ```groovy
 test {
   reports {
-    junitXml.enabled( true )
+    junitXml.enabled = true
   }
 }
 ```
