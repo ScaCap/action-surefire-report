@@ -1,23 +1,31 @@
 name: 'Surefire Report'
 description: 'Report Surefire test results as annotations on Github Pull Request [junit, failsafe]'
 branding:
-  icon: 'check-square'
-  color: 'green'
+    icon: 'check-square'
+    color: 'green'
 inputs:
-  github_token:
-    description: 'GITHUB_TOKEN'
-    required: true
-  report_paths:
-    description: 'surefire xml report paths in glob format'
-    required: false
-    default: '**/surefire-reports/TEST-*.xml'
-  check_name:
-    description: 'check name for test reports'
-    required: false
-    default: 'Test Report'
-  commit:
-    description: 'commit sha to update the status'
-    required: false
+    github_token:
+        description: 'GITHUB_TOKEN'
+        required: true
+    report_paths:
+        description: 'surefire xml report paths in glob format'
+        required: false
+        default: '**/surefire-reports/TEST-*.xml'
+    check_name:
+        description: 'check name for test reports'
+        required: false
+        default: 'Test Report'
+    commit:
+        description: 'commit sha to update the status'
+        required: false
+    fail_on_failure:
+        description: 'fail run if there were test failures'
+        required: false
+        default: 'false'
+outputs:
+    outcome:
+        description: 'the test outcome, either `success` or `failure`'
+
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+    using: 'node12'
+    main: 'dist/index.js'
