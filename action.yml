@@ -18,7 +18,7 @@ inputs:
   commit:
     description: 'commit sha to update the status'
     required: false
-  fail_on_failure:
+  fail_on_test_failures:
     description: 'fail run if there were test failures'
     required: false
     default: 'false'

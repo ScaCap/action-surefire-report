@@ -132,13 +132,15 @@ describe('action should work', () => {
         expect(request).toStrictEqual(masterSuccess);
     });
 
-    describe('with option fail_on_failure', () => {
+    describe('with option fail_on_test_failures', () => {
         it('should not fail on success', async () => {
             inputs.report_paths = '**/surefire-reports/TEST-*AllOkTest.xml';
+
             const scope = nock('https://api.github.com')
                 .post('/repos/scacap/action-surefire-report/check-runs')
                 .reply(200, {});
-            inputs['fail_on_failure'] = 'true';
+
+            inputs['fail_on_test_failures'] = 'true';
             await action();
             scope.done();
 
@@ -150,11 +152,11 @@ describe('action should work', () => {
                 .post('/repos/scacap/action-surefire-report/check-runs')
                 .reply(200, {});
 
-            inputs['fail_on_failure'] = 'true';
+            inputs['fail_on_test_failures'] = 'true';
             await action();
             scope.done();
 
-            expect(failed).toBe('There were 4 failed tests');
+            expect(failed).toBe('There were 11 failed tests');
         });
     });
 });

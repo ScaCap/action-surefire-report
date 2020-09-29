@@ -47,7 +47,7 @@ const action = async () => {
     await octokit.checks.create(createCheckRequest);
 
     // optionally fail the action if tests fail
-    if (core.getInput('fail_on_failure') === 'true' && conclusion !== 'success') {
+    if (core.getInput('fail_on_test_failures') === 'true' && conclusion !== 'success') {
         core.setFailed(`There were ${annotations.length} failed tests`);
     }
 };
