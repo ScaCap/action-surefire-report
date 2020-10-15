@@ -22,6 +22,10 @@ inputs:
     description: 'fail run if there were test failures'
     required: false
     default: 'false'
+  fail_if_no_tests:
+    description: 'fail run if there were no test results found'
+    required: false
+    default: 'true'
 outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
