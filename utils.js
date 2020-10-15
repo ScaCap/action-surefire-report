@@ -21,7 +21,16 @@ const resolvePath = async filename => {
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
-    const path = results.length ? results[0].slice(searchPath.length + 1) : filename;
+    
+    let path = '';
+    if (results.length) {
+        // skip various temp folders
+        const found = results.find(r => !r.includes('__pycache__'));
+        if (found) path = found.slice(searchPath.length + 1);
+        else path = filename;
+    } else {
+        path = filename;
+    }
     core.debug(`Resolved path: ${path}`);
 
     return path;

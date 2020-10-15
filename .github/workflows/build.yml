@@ -24,7 +24,7 @@ jobs:
           check_name: Example Surefire Test Report
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
-          args: pytest --junit-xml=python/report.xml python/ || exit 0
+          args: pytest  --junit-xml=python/report.xml python/ || exit 0
       - uses: scacap/action-surefire-report@master
         if: endsWith(github.ref, 'master') == false
         with:
