@@ -3,7 +3,7 @@ const github = require('@actions/github');
 const { parseTestReports } = require('./utils.js');
 
 const action = async () => {
-    const reportPaths = core.getInput('report_paths');
+    const reportPaths = core.getInput('report_paths').split(',').join('\n');
     core.info(`Going to parse results form ${reportPaths}`);
     const githubToken = core.getInput('github_token');
     const name = core.getInput('check_name');
