@@ -6,6 +6,7 @@ const {
     finishedWithFailures,
     finishedSuccess,
     nothingFound,
+    nothingFoundButSuccess,
     masterSuccess
 } = require('./action.test.fixtures');
 
@@ -53,7 +54,8 @@ describe('action should work', () => {
         inputs = {
             report_paths: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml',
             github_token: 'GITHUB_TOKEN',
-            check_name: 'Test Report'
+            check_name: 'Test Report',
+            fail_if_no_tests: 'true'
         };
 
         // Reset outputs
@@ -111,6 +113,23 @@ describe('action should work', () => {
 
         expect(request).toStrictEqual(nothingFound);
         expect(outputs).toHaveProperty('conclusion', 'failure');
+    });
+
+    it('should send OK if no test results were found and fail_if_no_tests is false', async () => {
+        inputs.report_paths = '**/xxx/*.xml';
+        inputs.fail_if_no_tests = 'false';
+        let request = null;
+        const scope = nock('https://api.github.com')
+            .post('/repos/scacap/action-surefire-report/check-runs', body => {
+                request = body;
+                return body;
+            })
+            .reply(200, {});
+        await action();
+        scope.done();
+
+        expect(request).toStrictEqual(nothingFoundButSuccess);
+        expect(outputs).toHaveProperty('conclusion', 'success');
     });
 
     it('should send reports to sha if no pr detected', async () => {
