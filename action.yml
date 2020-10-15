@@ -18,6 +18,14 @@ inputs:
   commit:
     description: 'commit sha to update the status'
     required: false
+  fail_on_test_failures:
+    description: 'fail run if there were test failures'
+    required: false
+    default: 'false'
+outputs:
+  outcome:
+     description: 'the test outcome, either `success` or `failure`'
+
 runs:
   using: 'node12'
   main: 'dist/index.js'

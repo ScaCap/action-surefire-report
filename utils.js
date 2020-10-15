@@ -33,7 +33,11 @@ const resolvePath = async filename => {
     }
     core.debug(`Resolved path: ${path}`);
 
-    return path;
+    // canonicalize to make windows paths use forward slashes
+    const canonicalPath = path.replace(/\\/g, '/');
+    core.debug(`Canonical path: ${canonicalPath}`);
+
+    return canonicalPath;
 };
 
 async function parseFile(file) {
