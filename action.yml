@@ -8,9 +8,9 @@ inputs:
     description: 'GITHUB_TOKEN'
     required: true
   report_paths:
-    description: 'surefire xml report paths in glob format'
+    description: 'surefire/failsafe/junit compatible xml report paths in glob format'
     required: false
-    default: '**/surefire-reports/TEST-*.xml'
+    default: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml'
   check_name:
     description: 'check name for test reports'
     required: false

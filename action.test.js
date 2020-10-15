@@ -51,7 +51,7 @@ describe('action should work', () => {
     beforeEach(() => {
         // Reset inputs
         inputs = {
-            report_paths: '**/surefire-reports/TEST-*.xml',
+            report_paths: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml',
             github_token: 'GITHUB_TOKEN',
             check_name: 'Test Report'
         };

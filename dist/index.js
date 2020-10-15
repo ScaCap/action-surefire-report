@@ -15390,7 +15390,7 @@ const github = __webpack_require__(858);
 const { parseTestReports } = __webpack_require__(845);
 
 const action = async () => {
-    const reportPaths = core.getInput('report_paths');
+    const reportPaths = core.getInput('report_paths').split(',').join('\n');
     core.info(`Going to parse results form ${reportPaths}`);
     const githubToken = core.getInput('github_token');
     const name = core.getInput('check_name');
