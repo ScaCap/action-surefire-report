@@ -15085,7 +15085,15 @@ const resolvePath = async filename => {
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
-    const path = results.length ? results[0].slice(searchPath.length + 1) : filename;
+    let path = '';
+    if (results.length) {
+        // skip various temp folders
+        const found = results.find(r => !r.includes('__pycache__'));
+        if (found) path = found.slice(searchPath.length + 1);
+        else path = filename;
+    } else {
+        path = filename;
+    }
     core.debug(`Resolved path: ${path}`);
 
     return path;
@@ -15103,15 +15111,15 @@ async function parseFile(file) {
     const testsuites = report.testsuite
         ? [report.testsuite]
         : Array.isArray(report.testsuites.testsuite)
-            ? report.testsuites.testsuite
-            : [report.testsuites.testsuite];
+        ? report.testsuites.testsuite
+        : [report.testsuites.testsuite];
 
     for (const testsuite of testsuites) {
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
-                ? [testsuite.testcase]
-                : [];
+            ? [testsuite.testcase]
+            : [];
         for (const testcase of testcases) {
             count++;
             if (testcase.skipped) skipped++;
