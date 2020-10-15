@@ -15139,8 +15139,8 @@ async function parseFile(file) {
 
                 const message = (
                     (testcase.failure &&
-                        testcase.error._attributes &&
-                        testcase.error._attributes.message) ||
+                        testcase.failure._attributes &&
+                        testcase.failure._attributes.message) ||
                     (testcase.error &&
                         testcase.error._attributes &&
                         testcase.error._attributes.message) ||
