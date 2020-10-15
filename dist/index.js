@@ -15085,6 +15085,7 @@ const resolvePath = async filename => {
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
+    
     let path = '';
     if (results.length) {
         // skip various temp folders
