@@ -25,6 +25,14 @@ Optional. Check name to use when creating a check run. The default is `Test Repo
 
 Optional. The commit sha to update the status. This is useful when you run it with `workflow_run`.
 
+### `fail_on_test_failures`
+
+Optional. Check will fail if there are test failures. The default is `false`.
+
+### `fail_if_no_tests`
+
+Optional. Check will fail if no tests were found. The default is `true`.
+
 ## Example usage
 
 ```yml
