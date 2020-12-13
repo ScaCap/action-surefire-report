@@ -27,15 +27,15 @@ action.surefire.report.email.InvalidEmailAddressException: Invalid email address
             'action.surefire.report.calc.CalcUtilsTest',
             `
 java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>
-    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
+    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:29)
 Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places
-    at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)
+    at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:33)
     at action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)
-    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
+    at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:29)
         `
         );
         expect(filename).toBe('CalcUtilsTest');
-        expect(line).toBe(27);
+        expect(line).toBe(29);
     });
 
     it('should parse correctly filename and line for extended stacktrace', () => {
@@ -96,17 +96,19 @@ describe('resolvePath', () => {
 
 describe('parseFile', () => {
     it('should parse CalcUtils results', async () => {
-        const { count, skipped, annotations } = await parseFile(
-            'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
+        const { count, skipped, failed, annotations } = await parseFile(
+           'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml',
+           true
         );
 
         expect(count).toBe(2);
         expect(skipped).toBe(0);
+        expect(failed).toBe(2);
         expect(annotations).toStrictEqual([
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
-                start_line: 27,
-                end_line: 27,
+                start_line: 29,
+                end_line: 29,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
@@ -114,7 +116,7 @@ describe('parseFile', () => {
                 message:
                     'unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>',
                 raw_details:
-                    'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)'
+                    'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:29)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:33)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:29)'
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
@@ -127,14 +129,26 @@ describe('parseFile', () => {
                 message: 'Expected: <100.10>\n     but: was <100.11>',
                 raw_details:
                     'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)'
-            }
+            },
+            {
+                "annotation_level": "notice",
+                "end_column": 0,
+                "end_line": 0,
+                "message": "stdout and stderr are concatenated below...",
+                "path": "tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt",
+                "raw_details": "stdout/stderr:\n===system.out?!\n===system.err?!\n",
+                "start_column": 0,
+                "start_line": 0,
+                "title": "testsuite action.surefire.report.calc.CalcUtilsTest stdout and stderr",
+            },
         ]);
     });
     it('should parse pytest results', async () => {
-        const { count, skipped, annotations } = await parseFile('python/report.xml');
+        const { count, skipped, failed, annotations } = await parseFile('python/report.xml', false);
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
+        expect(failed).toBe(2);
         expect(annotations).toStrictEqual([
             {
                 path: 'python/test_sample.py',

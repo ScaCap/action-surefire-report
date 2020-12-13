@@ -67,6 +67,7 @@ describe('action should work', () => {
     });
 
     it('should parse surefire reports and send a check run to GitHub', async () => {
+        inputs.capture_stdouterr = 'true';
         let request = null;
         const scope = nock('https://api.github.com')
             .post('/repos/scacap/action-surefire-report/check-runs', body => {

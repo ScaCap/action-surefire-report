@@ -24,6 +24,8 @@ class CalcUtilsTest {
 
     @Test
     fun `test error handling`() {
+        System.out.println("===system.out?!");
+        System.err.println("===system.err?!");
         assertThrows(IllegalStateException::class.java) { scale("100.001") }
     }
 

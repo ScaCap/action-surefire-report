@@ -26,6 +26,10 @@ inputs:
     description: 'fail run if there were no test results found'
     required: false
     default: 'true'
+  capture_stdouterr:
+    description: 'capture stdout and stderr for each testsuite'
+    required: false
+    default: 'false'
 outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
