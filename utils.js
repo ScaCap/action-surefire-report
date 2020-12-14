@@ -17,10 +17,12 @@ const resolveFileAndLine = (file, classname, output) => {
 
 const appendStdOutStdErrAnnotations = async (file, testsuite, pathFailuresSet, annotations) => {
     // gradle saves stdout/stderr directly to the XML file
-    const stdOutData = ((testsuite["system-out"] && testsuite["system-out"]._cdata) ||
-                       (testsuite["system-out"] && testsuite["system-out"]._text) || '').trim();
-    const stdErrData = ((testsuite["system-err"] && testsuite["system-err"]._cdata) ||
-                        (testsuite["system-err"] && testsuite["system-err"]._text) || '').trim();
+    const stdOutData = ((testsuite["system-out"] &&
+                         (testsuite["system-out"]._cdata || testsuite["system-out"]._text)) || '')
+                         .trim();
+    const stdErrData = ((testsuite["system-err"] &&
+                         (testsuite["system-err"]._cdata || testsuite["system-err"]._text)) || '')
+                         .trim();
     let raw_details;
     if (!stdErrData && !stdErrData) {
         // maven saves stdout/stderr to an independent file, remove "TEST-" from the file name.
