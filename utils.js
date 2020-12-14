@@ -167,7 +167,7 @@ async function parseFile(file, captureStdOutErr) {
                     annotation_level: 'failure',
                     title,
                     message,
-                    raw_details: stackTrace,
+                    raw_details: stackTrace
                 });
             }
         }
