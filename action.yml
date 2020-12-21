@@ -30,6 +30,9 @@ outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
 
+  title:
+     description: 'The results summary'
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
