@@ -47,6 +47,7 @@ const action = async () => {
 
     // make conclusion consumable by downstream actions
     core.setOutput('conclusion', conclusion);
+    core.setOutput('result', title);
 
     const octokit = new github.GitHub(githubToken);
     await octokit.checks.create(createCheckRequest);
