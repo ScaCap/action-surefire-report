@@ -27,7 +27,7 @@ const action = async () => {
     const status = 'completed';
     const head_sha = commit || (pullRequest && pullRequest.head.sha) || github.context.sha;
     core.info(
-        `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
+        `Posting status '${status}' with conclusion '${conclusion}' and title '${title}' to ${link} (sha: ${head_sha})`
     );
 
     const createCheckRequest = {
@@ -47,7 +47,7 @@ const action = async () => {
 
     // make conclusion consumable by downstream actions
     core.setOutput('conclusion', conclusion);
-    core.setOutput('result', title);
+    core.setOutput('title', title);
 
     const octokit = new github.GitHub(githubToken);
     await octokit.checks.create(createCheckRequest);
