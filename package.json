@@ -38,7 +38,6 @@
   },
   "devDependencies": {
     "@octokit/fixtures": "21.0.5",
-    "@zeit/ncc": "0.22.1",
     "enzyme": "3.11.0",
     "eslint": "7.0.0",
     "jest": "26.0.1",
