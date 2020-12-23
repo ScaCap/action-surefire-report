@@ -8,7 +8,7 @@
   "homepage": "https://github.com/ScaCap/action-surefire-report#readme",
   "scripts": {
     "eslint": "eslint .",
-    "package": "ncc build index.js -o dist",
+    "package": "webpack -c webpack.conf.js",
     "test": "jest",
     "test-ci": "jest --ci --reporters=jest-junit"
   },
@@ -37,11 +37,21 @@
     "xml-js": "^1.6.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
     "@octokit/fixtures": "21.0.5",
+    "babel-loader": "^8.2.2",
     "enzyme": "3.11.0",
     "eslint": "7.0.0",
     "jest": "26.0.1",
     "jest-junit": "10.0.0",
-    "nock": "12.0.3"
+    "nock": "12.0.3",
+    "webpack": "^5.11.0",
+    "webpack-cli": "^4.2.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }
