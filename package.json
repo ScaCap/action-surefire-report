@@ -32,17 +32,17 @@
   },
   "dependencies": {
     "@actions/core": "1.2.6",
-    "@actions/github": "2.2.0",
-    "@actions/glob": "0.1.0",
+    "@actions/github": "4.0.0",
+    "@actions/glob": "0.1.1",
     "xml-js": "1.6.11"
   },
   "devDependencies": {
-    "@octokit/fixtures": "21.0.5",
-    "@zeit/ncc": "0.22.1",
+    "@octokit/fixtures": "21.3.1",
+    "@zeit/ncc": "0.22.3",
     "enzyme": "3.11.0",
-    "eslint": "7.0.0",
-    "jest": "26.0.1",
-    "jest-junit": "10.0.0",
-    "nock": "12.0.3"
+    "eslint": "7.17.0",
+    "jest": "26.6.3",
+    "jest-junit": "12.0.0",
+    "nock": "13.0.5"
   }
 }
