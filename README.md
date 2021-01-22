@@ -48,8 +48,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v1
       - name: Build and Run Tests
-        run: mvn test --batch-mode -Dmaven.test.failure.ignore=true
+        run: mvn test --batch-mode
       - name: Publish Test Report
+        if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
