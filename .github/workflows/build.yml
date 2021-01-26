@@ -13,9 +13,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}-2
           restore-keys: |
-            ${{ runner.os }}-main-maven-
+            ${{ runner.os }}-main-maven-2-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
       - uses: scacap/action-surefire-report@master
         if: endsWith(github.ref, 'master') == false
