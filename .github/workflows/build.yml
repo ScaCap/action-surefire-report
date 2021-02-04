@@ -37,9 +37,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}_2
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-npm-cache-_2
+            ${{ runner.os }}-npm-cache-
       - run: npm install
       - run: npm run eslint
       - run: npm run test
