@@ -13,9 +13,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}_3
+          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-main-maven-_3
+            ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
       - uses: scacap/action-surefire-report@master
         if: endsWith(github.ref, 'master') == false
@@ -37,9 +37,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}_2
           restore-keys: |
-            ${{ runner.os }}-npm-cache-
+            ${{ runner.os }}-npm-cache-_2
       - run: npm install
       - run: npm run eslint
       - run: npm run test
