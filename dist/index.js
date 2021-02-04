@@ -15159,19 +15159,14 @@ async function parseFile(file) {
             count++;
             if (testcase.skipped) skipped++;
             if (testcase.failure || testcase.error) {
-                let testcaseData = (
+                let testcaseData =
                     (testcase.failure && testcase.failure._cdata) ||
                     (testcase.failure && testcase.failure._text) ||
                     (testcase.error && testcase.error._cdata) ||
                     (testcase.error && testcase.error._text) ||
-                    ''
-                );
-                testcaseData = Array.isArray(testcaseData)
-                    ? testcaseData 
-                    : [testcaseData]
-                const stackTrace = testcaseData.length
-                    ? testcaseData[0]
-                    : '';
+                    '';
+                testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
+                const stackTrace = (testcaseData.length ? testcaseData[0] : '').trim();
 
                 const message = (
                     (testcase.failure &&
