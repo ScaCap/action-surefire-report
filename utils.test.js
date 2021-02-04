@@ -162,4 +162,55 @@ describe('parseFile', () => {
             }
         ]);
     });
+    it('should parse custom_reports', async () => {
+        const { count, skipped, annotations } = await parseFile('custom_reports/TEST-pro.taskana.common.api.ListUtilTest.xml');
+
+        expect(count).toBe(1);
+        expect(skipped).toBe(0);
+        console.log(annotations);
+        expect(annotations).toStrictEqual([  
+            {
+                path: 'ListUtilTest',
+                start_line: 1,
+                end_line: 1,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'ListUtilTest.should_SplitListIntoChunks_When_CallingPartitionBasedOnSize',
+                message: 'java.lang.AssertionError:',
+                raw_details: 'java.lang.AssertionError: \n' +
+                  '\n' +
+                  'Expected size:<11> but was:<10> in:\n' +
+                  '<[[1,\n' +
+                  '    2,\n' +
+                  '    3,\n' +
+                  '    4,\n' +
+                  '    5,\n' +
+                  '    6,\n' +
+                  '    7,\n' +
+                  '    96,\n' +
+                  '    97,\n' +
+                  '    98,\n' +
+                  '    99,\n' +
+                  '    100],\n' +
+                  '    [101,\n' +
+                  '    102,\n' +
+                  '    103,\n' +
+                  '    104,\n' +
+                  '    194,\n' +
+                  '    195,\n' +
+                  '    196,\n' +
+                  '    197,\n' +
+                  '    198,\n' +
+                  '    199,\n' +
+                  '    200],\n' +
+                  '    [201,\n' +
+                  '    202,\n' +
+                  '    997,\n' +
+                  '    998,\n' +
+                  '    999,\n' +
+                  '    1000]]'
+            }
+        ]);
+    });
 });
