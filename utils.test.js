@@ -167,7 +167,6 @@ describe('parseFile', () => {
 
         expect(count).toBe(1);
         expect(skipped).toBe(0);
-        console.log(annotations);
         expect(annotations).toStrictEqual([  
             {
                 path: 'ListUtilTest',
