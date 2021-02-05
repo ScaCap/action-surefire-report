@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="test.MyIntegrationTestSuite" time="751.336" tests="924" errors="0" skipped="0" failures="6">
+  <testcase name="testGetMails" classname="test.MyIntegrationTest" time="0.249">
+    <flakyFailure message="JSON path &quot;$.mails[0].subject&quot;&#10;Expected: &quot;MySubject&quot;&#10;     but: was &quot;YourSubject&quot;" type="java.lang.AssertionError">
+      <stackTrace>java.lang.AssertionError: 
+JSON path "$.mails[0].subject"
+Expected: "MySubject"
+     but: was "YourSubject"
+	at test.MyIntegrationTest.testGetMails(MyIntegrationTest.java:43)
+</stackTrace>
+      <system-out><![CDATA[2021-02-05 09:11:05.249  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2021-02-05 09:11:05.249  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2021-02-05 09:11:05.255  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 6 ms
+]]></system-out>
+    </flakyFailure>
+  </testcase>
+  <testcase name="shouldReturnBadRequestIfDocumentTypeIsInvalid" classname="test.DocumentUploadIntegrationTest" time="0.577">
+    <failure message="Status expected:&lt;400&gt; but was:&lt;403&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Status expected:<400> but was:<403>
+	at test.DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentTypeIsInvalid(DocumentUploadIntegrationTest.java:33)
+]]></failure>
+    <system-out><![CDATA[2021-02-05 09:11:11.090  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2021-02-05 09:11:11.091  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2021-02-05 09:11:11.096  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 5 ms
+]]></system-out>
+  </testcase>
+  <testcase name="shouldReturnSuccessResponse" classname="test.DocumentUploadIntegrationTest" time="0.711">
+    <flakyFailure message="Status expected:&lt;200&gt; but was:&lt;403&gt;" type="java.lang.AssertionError">
+      <stackTrace><![CDATA[java.lang.AssertionError: Status expected:<200> but was:<403>
+	at test.DocumentUploadIntegrationTest.shouldReturnSuccessResponse(DocumentUploadIntegrationTest.java:23)
+]]></stackTrace>
+      <system-out><![CDATA[2021-02-05 09:11:11.668  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2021-02-05 09:11:11.668  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2021-02-05 09:11:11.673  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 5 ms
+]]></system-out>
+    </flakyFailure>
+  </testcase>
+  <testcase name="shouldReturnBadRequestIfDocumentSizeIsZero" classname="test.DocumentUploadIntegrationTest" time="0.573">
+    <failure message="Status expected:&lt;400&gt; but was:&lt;403&gt;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: Status expected:<400> but was:<403>
+	at test.DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentSizeIsZero(DocumentUploadIntegrationTest.java:47)
+]]></failure>
+    <system-out><![CDATA[2021-02-05 09:11:12.244  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2021-02-05 09:11:12.244  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2021-02-05 09:11:12.249  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 5 ms
+]]></system-out>
+  </testcase>
+  <testcase name="jacksonShouldHandleTypesCorrectly" classname="test.TestResourceIntegrationTest" time="0.018"/>
+</testsuite>

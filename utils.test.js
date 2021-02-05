@@ -162,12 +162,14 @@ describe('parseFile', () => {
             }
         ]);
     });
-    it('should parse custom_reports', async () => {
-        const { count, skipped, annotations } = await parseFile('custom_reports/TEST-pro.taskana.common.api.ListUtilTest.xml');
+    it('should parse custom report with details as an array', async () => {
+        const { count, skipped, annotations } = await parseFile(
+            'custom_reports/TEST-pro.taskana.common.api.ListUtilTest.xml'
+        );
 
         expect(count).toBe(1);
         expect(skipped).toBe(0);
-        expect(annotations).toStrictEqual([  
+        expect(annotations).toStrictEqual([
             {
                 path: 'ListUtilTest',
                 start_line: 1,
@@ -177,38 +179,102 @@ describe('parseFile', () => {
                 annotation_level: 'failure',
                 title: 'ListUtilTest.should_SplitListIntoChunks_When_CallingPartitionBasedOnSize',
                 message: 'java.lang.AssertionError:',
-                raw_details: 'java.lang.AssertionError: \n' +
-                  '\n' +
-                  'Expected size:<11> but was:<10> in:\n' +
-                  '<[[1,\n' +
-                  '    2,\n' +
-                  '    3,\n' +
-                  '    4,\n' +
-                  '    5,\n' +
-                  '    6,\n' +
-                  '    7,\n' +
-                  '    96,\n' +
-                  '    97,\n' +
-                  '    98,\n' +
-                  '    99,\n' +
-                  '    100],\n' +
-                  '    [101,\n' +
-                  '    102,\n' +
-                  '    103,\n' +
-                  '    104,\n' +
-                  '    194,\n' +
-                  '    195,\n' +
-                  '    196,\n' +
-                  '    197,\n' +
-                  '    198,\n' +
-                  '    199,\n' +
-                  '    200],\n' +
-                  '    [201,\n' +
-                  '    202,\n' +
-                  '    997,\n' +
-                  '    998,\n' +
-                  '    999,\n' +
-                  '    1000]]'
+                raw_details:
+                    'java.lang.AssertionError: \n' +
+                    '\n' +
+                    'Expected size:<11> but was:<10> in:\n' +
+                    '<[[1,\n' +
+                    '    2,\n' +
+                    '    3,\n' +
+                    '    4,\n' +
+                    '    5,\n' +
+                    '    6,\n' +
+                    '    7,\n' +
+                    '    96,\n' +
+                    '    97,\n' +
+                    '    98,\n' +
+                    '    99,\n' +
+                    '    100],\n' +
+                    '    [101,\n' +
+                    '    102,\n' +
+                    '    103,\n' +
+                    '    104,\n' +
+                    '    194,\n' +
+                    '    195,\n' +
+                    '    196,\n' +
+                    '    197,\n' +
+                    '    198,\n' +
+                    '    199,\n' +
+                    '    200],\n' +
+                    '    [201,\n' +
+                    '    202,\n' +
+                    '    997,\n' +
+                    '    998,\n' +
+                    '    999,\n' +
+                    '    1000]]'
+            }
+        ]);
+    });
+
+    it('should parse custom report with flaky failures', async () => {
+        const { count, skipped, annotations } = await parseFile(
+            'custom_reports/TEST-test.MyIntegrationTestSuite.xml'
+        );
+
+        expect(count).toBe(5);
+        expect(skipped).toBe(0);
+        expect(annotations).toStrictEqual([
+            {
+                path: 'MyIntegrationTest',
+                start_line: 1,
+                end_line: 1,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'MyIntegrationTest.testGetMails',
+                message:
+                    'JSON path "$.mails[0].subject"\n' +
+                    'Expected: "MySubject"\n' +
+                    '     but: was "YourSubject"',
+                raw_details: ''
+            },
+            {
+                path: 'DocumentUploadIntegrationTest',
+                start_line: 33,
+                end_line: 33,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title:
+                    'DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentTypeIsInvalid',
+                message: 'Status expected:<400> but was:<403>',
+                raw_details:
+                    'java.lang.AssertionError: Status expected:<400> but was:<403>\n' +
+                    '\tat test.DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentTypeIsInvalid(DocumentUploadIntegrationTest.java:33)'
+            },
+            {
+                path: 'DocumentUploadIntegrationTest',
+                start_line: 1,
+                end_line: 1,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'DocumentUploadIntegrationTest.shouldReturnSuccessResponse',
+                message: 'Status expected:<200> but was:<403>',
+                raw_details: ''
+            },
+            {
+                path: 'DocumentUploadIntegrationTest',
+                start_line: 47,
+                end_line: 47,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentSizeIsZero',
+                message: 'Status expected:<400> but was:<403>',
+                raw_details:
+                    'java.lang.AssertionError: Status expected:<400> but was:<403>\n' +
+                    '\tat test.DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentSizeIsZero(DocumentUploadIntegrationTest.java:47)'
             }
         ]);
     });

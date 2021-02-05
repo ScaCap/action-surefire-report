@@ -64,10 +64,12 @@ async function parseFile(file) {
         for (const testcase of testcases) {
             count++;
             if (testcase.skipped) skipped++;
-            if (testcase.failure || testcase.error) {
+            if (testcase.failure || testcase.flakyFailure || testcase.error) {
                 let testcaseData =
                     (testcase.failure && testcase.failure._cdata) ||
                     (testcase.failure && testcase.failure._text) ||
+                    (testcase.flakyFailure && testcase.flakyFailure._cdata) ||
+                    (testcase.flakyFailure && testcase.flakyFailure._text) ||
                     (testcase.error && testcase.error._cdata) ||
                     (testcase.error && testcase.error._text) ||
                     '';
@@ -78,6 +80,9 @@ async function parseFile(file) {
                     (testcase.failure &&
                         testcase.failure._attributes &&
                         testcase.failure._attributes.message) ||
+                    (testcase.flakyFailure &&
+                        testcase.flakyFailure._attributes &&
+                        testcase.flakyFailure._attributes.message) ||
                     (testcase.error &&
                         testcase.error._attributes &&
                         testcase.error._attributes.message) ||
