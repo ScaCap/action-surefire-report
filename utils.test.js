@@ -172,8 +172,8 @@ describe('parseFile', () => {
         expect(annotations).toStrictEqual([
             {
                 path: 'ListUtilTest',
-                start_line: 1,
-                end_line: 1,
+                start_line: 22,
+                end_line: 22,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
@@ -211,7 +211,8 @@ describe('parseFile', () => {
                     '    997,\n' +
                     '    998,\n' +
                     '    999,\n' +
-                    '    1000]]'
+                    '    1000]]>\n' +
+                    '\tat pro.taskana.common.api.ListUtilTest.should_SplitListIntoChunks_When_CallingPartitionBasedOnSize(ListUtilTest.java:22)'
             }
         ]);
     });
