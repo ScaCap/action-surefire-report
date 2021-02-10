@@ -74,7 +74,7 @@ async function parseFile(file) {
                     (testcase.error && testcase.error._text) ||
                     '';
                 testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
-                const stackTrace = (testcaseData.length ? testcaseData[0] : '').trim();
+                const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
 
                 const message = (
                     (testcase.failure &&
