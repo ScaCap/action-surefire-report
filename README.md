@@ -29,6 +29,10 @@ Optional. Check will fail if there are test failures. The default is `false`.
 
 Optional. Check will fail if no tests were found. The default is `true`.
 
+### `github_token`
+
+**Optional**. Usually in form of github_token: ${{ secrets.GITHUB_TOKEN }}. The default is ${{ github.token }}.
+
 ## Example usage
 
 ```yml
