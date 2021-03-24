@@ -164,7 +164,7 @@ describe('parseFile', () => {
     });
     it('should parse custom report with details as an array', async () => {
         const { count, skipped, annotations } = await parseFile(
-            'custom_reports/TEST-pro.taskana.common.api.ListUtilTest.xml'
+            'custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'
         );
 
         expect(count).toBe(1);
