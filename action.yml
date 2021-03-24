@@ -7,6 +7,7 @@ inputs:
   github_token:
     description: 'GITHUB_TOKEN'
     required: true
+    default: ${{ github.token }}
   report_paths:
     description: 'surefire/failsafe/junit compatible xml report paths in glob format'
     required: false

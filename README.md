@@ -9,10 +9,6 @@ This action processes maven surefire or failsafe XML reports on pull requests an
 
 ## Inputs
 
-### `github_token`
-
-**Required**. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`.
-
 ### `report_paths`
 
 Optional. [Glob](https://github.com/actions/toolkit/tree/master/packages/glob) expression to surefire or failsafe report paths. The default is `**/surefire-reports/TEST-*.xml`.
@@ -33,6 +29,10 @@ Optional. Check will fail if there are test failures. The default is `false`.
 
 Optional. Check will fail if no tests were found. The default is `true`.
 
+### `github_token`
+
+Optional. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`. The default is `${{ github.token }}`.
+
 ## Example usage
 
 ```yml
@@ -52,8 +52,6 @@ jobs:
       - name: Publish Test Report
         if: ${{ always() }}
         uses: scacap/action-surefire-report@v1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Tips for Gradle
