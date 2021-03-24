@@ -17,14 +17,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-main-maven-
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@${GITHUB_REF##*/}
+      - uses: scacap/action-surefire-report@47-fix-line-number-for-test-with-suffix
         if: endsWith(github.ref, 'master') == false
         with:
           check_name: Example Surefire Test Report
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
           args: pytest  --junit-xml=python/report.xml python/ || exit 0
-      - uses: scacap/action-surefire-report@${GITHUB_REF##*/}
+      - uses: scacap/action-surefire-report@47-fix-line-number-for-test-with-suffix
         if: endsWith(github.ref, 'master') == false
         with:
           check_name: Example Pytest Report
