@@ -15098,7 +15098,8 @@ const fs = __webpack_require__(747);
 const parser = __webpack_require__(477);
 
 const resolveFileAndLine = (file, classname, output) => {
-    const filename = file ? file : classname.split('.').slice(-1)[0];
+    // extract filename from classname and remove suffix
+    const filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
     if (!matches) return { filename: filename, line: 1 };
 
