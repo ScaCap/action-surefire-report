@@ -16,6 +16,9 @@ jobs:
           key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-main-maven-
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 8
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
       - uses: scacap/action-surefire-report@47-fix-line-number-for-test-with-suffix
         if: endsWith(github.ref, 'master') == false
