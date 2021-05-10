@@ -3,6 +3,8 @@ const github = require('@actions/github');
 const { parseTestReports } = require('./utils.js');
 
 const action = async () => {
+    core.info(`[DEBUG] 1`);
+
     const reportPaths = core.getInput('report_paths').split(',').join('\n');
     core.info(`Going to parse results form ${reportPaths}`);
     const githubToken = core.getInput('github_token');
@@ -30,6 +32,7 @@ const action = async () => {
         `Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`
     );
 
+    core.info(`[DEBUG] 2`);
     const createCheckRequest = {
         ...github.context.repo,
         name,
@@ -49,9 +52,11 @@ const action = async () => {
     core.setOutput('conclusion', conclusion);
 
     const octokit = new github.GitHub(githubToken);
+    core.info(`[DEBUG] 3`);
     await octokit.checks.create(createCheckRequest);
 
     // optionally fail the action if tests fail
+    core.info(`[DEBUG] 4`);
     if (failOnFailedTests && conclusion !== 'success') {
         core.setFailed(`There were ${annotations.length} failed tests`);
     }
