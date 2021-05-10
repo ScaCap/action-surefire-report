@@ -29,7 +29,7 @@ Optional. Check will fail if there are test failures. The default is `false`.
 
 Optional. Check will fail if no tests were found. The default is `true`.
 
-### `skip_check_run`
+### `skip_check_run_creation`
 
 Optional. Skip the check run creation. The default is `false`.
 

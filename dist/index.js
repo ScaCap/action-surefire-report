@@ -11476,7 +11476,7 @@ const action = async () => {
     const commit = core.getInput('commit');
     const failOnFailedTests = core.getInput('fail_on_test_failures') === 'true';
     const failIfNoTests = core.getInput('fail_if_no_tests') === 'true';
-    const skipCheckRun = core.getInput('skip_check_run') === 'true';
+    const skipCheckRun = core.getInput('skip_check_run_creation') === 'true';
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths);
     const foundResults = count > 0 || skipped > 0;

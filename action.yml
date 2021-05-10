@@ -27,7 +27,7 @@ inputs:
     description: 'fail run if there were no test results found'
     required: false
     default: 'true'
-  skip_check_run:
+  skip_check_run_creation:
     description: 'skip check run creation'
     required: false
     default: 'false'
