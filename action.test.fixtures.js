@@ -4,7 +4,7 @@ const finishedWithFailures = {
     status: 'completed',
     conclusion: 'failure',
     output: {
-        title: '17 tests run, 1 skipped, 11 failed.',
+        title: '19 tests run, 1 skipped, 12 failed.',
         summary: '',
         annotations: [
             {
@@ -98,6 +98,19 @@ const finishedWithFailures = {
                 message: "Invalid email address '.user@host.com'",
                 raw_details:
                     "action.surefire.report.email.InvalidEmailAddressException: Invalid email address '.user@host.com'\n\tat action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)\n\tat action.surefire.report.email.EmailAddressTest.shouldNotAllowDotsInWeirdPlaces(EmailAddressTest.java:66)"
+            },
+            {
+                path:
+                    'tests/evil_twins/src/test/java/action/surefire/report/twin/second/TwinTest.java',
+                start_line: 13,
+                end_line: 13,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'TwinTest.should_always_fail',
+                message: "Expected: \"Good Twin\"\n     but: was \"Evil Twin\"",
+                raw_details:
+                    "java.lang.AssertionError: \n\nExpected: \"Good Twin\"\n     but: was \"Evil Twin\"\n\tat action.surefire.report.twin.second.TwinTest.should_always_fail(TwinTest.java:13)"
             },
             {
                 path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
