@@ -6,19 +6,20 @@ const parser = require('xml-js');
 const resolveFileAndLine = (file, classname, output) => {
     // extract filename from classname and remove suffix
     const filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
+    const filenameWithPackage = classname.replace(/\./g, "/");
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
-    if (!matches) return { filename: filename, line: 1 };
+    if (!matches) return { filename: filename, filenameWithPackage: filenameWithPackage, line: 1 };
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');
-    core.debug(`Resolved file ${filename} and line ${line}`);
+    core.debug(`Resolved file ${filenameWithPackage} with name {filename} and line ${line}`);
 
-    return { filename, line: parseInt(line) };
+    return { filename, filenameWithPackage, line: parseInt(line) };
 };
 
-const resolvePath = async filename => {
-    core.debug(`Resolving path for ${filename}`);
-    const globber = await glob.create(`**/${filename}.*`, { followSymbolicLinks: false });
+const resolvePath = async filenameWithPackage => {
+    core.debug(`Resolving path for ${filenameWithPackage}`);
+    const globber = await glob.create(`**/${filenameWithPackage}.*`, { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
@@ -28,9 +29,9 @@ const resolvePath = async filename => {
         // skip various temp folders
         const found = results.find(r => !r.includes('__pycache__'));
         if (found) path = found.slice(searchPath.length + 1);
-        else path = filename;
+        else path = filenameWithPackage;
     } else {
-        path = filename;
+        path = filenameWithPackage;
     }
     core.debug(`Resolved path: ${path}`);
 
@@ -90,13 +91,13 @@ async function parseFile(file) {
                     stackTrace.split('\n').slice(0, 2).join('\n')
                 ).trim();
 
-                const { filename, line } = resolveFileAndLine(
+                const { filename, filenameWithPackage, line } = resolveFileAndLine(
                     testcase._attributes.file,
                     testcase._attributes.classname,
                     stackTrace
                 );
 
-                const path = await resolvePath(filename);
+                const path = await resolvePath(filenameWithPackage);
                 const title = `${filename}.${testcase._attributes.name}`;
                 core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
 
