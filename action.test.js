@@ -55,7 +55,8 @@ describe('action should work', () => {
             report_paths: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml',
             github_token: 'GITHUB_TOKEN',
             check_name: 'Test Report',
-            fail_if_no_tests: 'true'
+            fail_if_no_tests: 'true',
+            skip_publishing: 'false'
         };
 
         // Reset outputs
@@ -149,6 +150,14 @@ describe('action should work', () => {
         scope.done();
 
         expect(request).toStrictEqual(masterSuccess);
+    });    
+    
+    it('should not send report on skip_publishing', async () => {
+        inputs.skip_publishing = 'true';
+
+        // nock error if the request is sent
+
+        await action();
     });
 
     describe('with option fail_on_test_failures', () => {
