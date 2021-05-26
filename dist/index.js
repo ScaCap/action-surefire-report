@@ -15496,6 +15496,8 @@ const action = async () => {
 
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
+    } else {
+        core.info('Not publishing test result due to skip_publishing=true');
     }
 
     // make conclusion consumable by downstream actions
