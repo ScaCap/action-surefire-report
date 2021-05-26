@@ -20,15 +20,14 @@ jobs:
         with:
           java-version: 8
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@skip_publishing
+      - uses: scacap/action-surefire-report@master
         if: endsWith(github.ref, 'master') == false
         with:
           check_name: Example Surefire Test Report
-          skip_publishing: true
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
           args: pytest  --junit-xml=python/report.xml python/ || exit 0
-      - uses: scacap/action-surefire-report@skip_publishing
+      - uses: scacap/action-surefire-report@master
         if: endsWith(github.ref, 'master') == false
         with:
           check_name: Example Pytest Report
