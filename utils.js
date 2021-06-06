@@ -17,26 +17,27 @@ const resolveFileAndLine = (file, classname, output) => {
 };
 
 const resolvePath = async filename => {
-    core.debug(`Resolving path for ${filename}`);
+    core.info(`Resolving path for ${filename}`);
     const globber = await glob.create(`**/${filename}.*`, { followSymbolicLinks: false });
     const results = await globber.glob();
-    core.debug(`Matched files: ${results}`);
+    core.info(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
 
     let path = '';
     if (results.length) {
         // skip various temp folders
         const found = results.find(r => !r.includes('__pycache__') && !r.endsWith(".class"));
+        core.info(`Found: ${found}`)
         if (found) path = found.slice(searchPath.length + 1);
         else path = filename;
     } else {
         path = filename;
     }
-    core.debug(`Resolved path: ${path}`);
+    core.info(`Resolved path: ${path}`);
 
     // canonicalize to make windows paths use forward slashes
     const canonicalPath = path.replace(/\\/g, '/');
-    core.debug(`Canonical path: ${canonicalPath}`);
+    core.info(`Canonical path: ${canonicalPath}`);
 
     return canonicalPath;
 };
