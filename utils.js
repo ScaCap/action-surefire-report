@@ -26,7 +26,7 @@ const resolvePath = async filename => {
     let path = '';
     if (results.length) {
         // skip various temp folders
-        const found = results.find(r => !r.includes('__pycache__'));
+        const found = results.find(r => !r.includes('__pycache__') && !r.endsWith('.class'));
         if (found) path = found.slice(searchPath.length + 1);
         else path = filename;
     } else {
