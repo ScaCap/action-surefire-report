@@ -15192,7 +15192,7 @@ async function parseFile(file) {
 
                 const path = await resolvePath(filename);
                 const title = `${filename}.${testcase._attributes.name}`;
-                core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+                core.issueCommand('error', {file: path, line:line}, `${message.replace(/\n/g, ' ')}`);
 
                 annotations.push({
                     path,
