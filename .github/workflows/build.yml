@@ -20,7 +20,7 @@ jobs:
         with:
           java-version: 8
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@master
+      - uses: scacap/action-surefire-report@error_lines
         if: endsWith(github.ref, 'master') == false
         with:
           check_name: Example Surefire Test Report
