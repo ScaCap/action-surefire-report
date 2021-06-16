@@ -12,6 +12,7 @@
     <modules>
         <module>utils</module>
         <module>email</module>
+        <module>evil_twins</module>
     </modules>
 
     <properties>
@@ -73,6 +74,7 @@
                 <configuration>
                     <argLine>-Duser.language=en</argLine>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <testFailureIgnore>true</testFailureIgnore>
                 </configuration>
             </plugin>
         </plugins>
