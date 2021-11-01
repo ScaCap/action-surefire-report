@@ -56,6 +56,9 @@ const action = async () => {
 
     // make conclusion consumable by downstream actions
     core.setOutput('conclusion', conclusion);
+    
+    // output the results for downstream actions
+    core.setOutput('test_results', title);
 
     // optionally fail the action if tests fail
     if (failOnFailedTests && conclusion !== 'success') {
