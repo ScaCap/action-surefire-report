@@ -48,6 +48,9 @@ const action = async () => {
 
         core.debug(JSON.stringify(createCheckRequest, null, 2));
 
+        // output the results for downstream actions
+        core.setOutput('results', title);
+
         const octokit = new github.GitHub(githubToken);
         await octokit.checks.create(createCheckRequest);
     } else {
@@ -56,9 +59,6 @@ const action = async () => {
 
     // make conclusion consumable by downstream actions
     core.setOutput('conclusion', conclusion);
-    
-    // output the results for downstream actions
-    core.setOutput('test_results', title);
 
     // optionally fail the action if tests fail
     if (failOnFailedTests && conclusion !== 'success') {
