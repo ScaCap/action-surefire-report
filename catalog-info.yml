@@ -1,0 +1,15 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: action-surefire-report
+  description: |
+    This action processes maven surefire or failsafe XML reports on pull requests and shows the result as a PR check with summary and annotations
+  annotations:
+    github.com/project-slug: Tradeshift/action-surefire-report
+  tags:
+    - github-action
+    - fork
+spec:
+  type: library
+  owner: developer-productivity
+  lifecycle: production
