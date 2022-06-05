@@ -48,6 +48,12 @@ jobs:
   build:
     name: Build and Run Tests
     runs-on: ubuntu-latest
+    # Permissions block is optional, useful for dependabot checks
+    permissions:
+      checks: write
+      contents: read
+      issues: read
+      pull-requests: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v1
