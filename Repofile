@@ -1,0 +1,9 @@
+{
+	"description": "GitHub Action to process maven surefire reports",
+	"checks": [
+        "build"
+    ],
+	"maintainers": [
+		"Developer productivity"
+	]
+}
