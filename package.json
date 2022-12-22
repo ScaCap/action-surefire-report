@@ -31,7 +31,7 @@
     "titleTemplate": "{title}"
   },
   "dependencies": {
-    "@actions/core": "1.2.6",
+    "@actions/core": "1.9.1",
     "@actions/github": "2.2.0",
     "@actions/glob": "0.1.1",
     "xml-js": "1.6.11"
