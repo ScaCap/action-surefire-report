@@ -5,37 +5,45 @@ on:
     branches:
       - master
 
+concurrency:
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  group: ${{ github.ref }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-main-maven-
-      - uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
           java-version: 8
+          distribution: 'zulu'
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
       - uses: scacap/action-surefire-report@master
-        if: endsWith(github.ref, 'master') == false
+        if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Surefire Test Report
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
           args: pytest  --junit-xml=python/report.xml python/ || exit 0
       - uses: scacap/action-surefire-report@master
-        if: endsWith(github.ref, 'master') == false
+        if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Pytest Report
           report_paths: python/report.xml
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
