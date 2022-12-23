@@ -48,8 +48,8 @@ const action = async () => {
 
         core.debug(JSON.stringify(createCheckRequest, null, 2));
 
-        const octokit = new github.GitHub(githubToken);
-        await octokit.checks.create(createCheckRequest);
+        const octokit = github.getOctokit(githubToken);
+        await octokit.rest.checks.create(createCheckRequest);
     } else {
         core.info('Not publishing test result due to skip_publishing=true');
     }
