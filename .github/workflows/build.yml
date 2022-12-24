@@ -28,7 +28,7 @@ jobs:
           java-version: 8
           distribution: 'zulu'
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: ./
+      - uses: scacap/action-surefire-report@master
         if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Surefire Test Report
