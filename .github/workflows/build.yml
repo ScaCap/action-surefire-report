@@ -16,6 +16,7 @@ jobs:
       contents: read
       checks: write
       pull-requests: write
+      issues: write
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
