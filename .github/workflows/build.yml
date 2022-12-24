@@ -9,7 +9,8 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
   group: ${{ github.ref }}
 
-permissions: none
+permissions:
+  checks: read
 
 jobs:
   build:
