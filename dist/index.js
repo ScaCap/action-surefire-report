@@ -14479,7 +14479,7 @@ const resolvePath = async filename => {
 };
 
 async function parseFile(file) {
-    core.debug(`Parsing file ${file}`);
+    core.info(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
     let annotations = [];
@@ -14513,7 +14513,7 @@ async function parseFile(file) {
                     '';
                 testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
                 const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
-
+                core.info(`stackTrace: ${stackTrace}`)
                 const message = (
                     (testcase.failure &&
                         testcase.failure._attributes &&
@@ -14526,6 +14526,7 @@ async function parseFile(file) {
                         testcase.error._attributes.message) ||
                     stackTrace.split('\n').slice(0, 2).join('\n')
                 ).trim();
+                core.info(`message: ${message}`)
 
                 const { filename, line } = resolveFileAndLine(
                     testcase._attributes.file,
@@ -14559,7 +14560,6 @@ const parseTestReports = async reportPaths => {
     let annotations = [];
     let count = 0;
     let skipped = 0;
-    core.info("logging...");
     for await (const file of globber.globGenerator()) {
         const { count: c, skipped: s, annotations: a } = await parseFile(file);
         core.info(JSON.stringify({count, skipped, annotations}));
