@@ -47,7 +47,7 @@ jobs:
           cd go && 
             go install github.com/jstemmer/go-junit-report/v2@latest &&
             go test -v 2>&1 ./... |
-            go-junit-report -set-exit-code -out report.xml
+            go-junit-report -out report.xml
       - uses: ./
         if: github.ref != 'refs/heads/master'
         with:
