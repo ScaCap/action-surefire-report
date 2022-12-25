@@ -4,13 +4,18 @@ const fs = require('fs');
 const parser = require('xml-js');
 
 const resolveFileAndLine = (file, classname, output) => {
+    const isFilenameInOutput = core.getInput('file_name_in_stack_trace') === 'true';
     // extract filename from classname and remove suffix
-    // const filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
-    const filename = output.split(':')[0].trim()
+    let filename;
+    if (isFilenameInOutput) {
+        filename = output.split(':')[0].trim();
+    } else {
+        filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
+    }
     console.log({file, filename, classname, output});
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
     console.log({matches});
-    if (!matches) return { filename: filename, line: 1 };
+    if (!matches) return {filename: filename, line: 1};
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');

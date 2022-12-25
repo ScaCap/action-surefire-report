@@ -31,6 +31,10 @@ inputs:
     description: 'skip test report publishing'
     required: false
     default: 'false'
+  file_name_in_stack_trace:
+    description: 'get filename from stack trace'
+    required: false
+    default: 'false'
 outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
