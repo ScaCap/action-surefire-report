@@ -6,7 +6,9 @@ const parser = require('xml-js');
 const resolveFileAndLine = (file, classname, output) => {
     // extract filename from classname and remove suffix
     const filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
+    console.log({file, filename, classname, output});
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
+    console.log({matches});
     if (!matches) return { filename: filename, line: 1 };
 
     const [lastItem] = matches.slice(-1);
