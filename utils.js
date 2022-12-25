@@ -68,6 +68,8 @@ async function parseFile(file) {
             count++;
             if (testcase.skipped) skipped++;
             if (testcase.failure || testcase.flakyFailure || testcase.error) {
+                console.log('testcase:');
+                console.log(testcase);
                 let testcaseData =
                     (testcase.failure && testcase.failure._cdata) ||
                     (testcase.failure && testcase.failure._text) ||
