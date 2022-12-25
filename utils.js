@@ -20,7 +20,7 @@ const resolveFileAndLine = (file, classname, output) => {
 
 const resolvePath = async filename => {
     core.info(`Resolving path for ${filename}`);
-    const globber = await glob.create(`**/(${filename}.*|${filename})`, { followSymbolicLinks: false });
+    const globber = await glob.create([`**/${filename}.*`, `**/${filename}`].join('\n'), { followSymbolicLinks: false });
     const results = await globber.glob();
     core.info(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
