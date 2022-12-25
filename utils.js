@@ -12,7 +12,6 @@ const resolveFileAndLine = (file, classname, output) => {
     } else {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
     }
-    console.log({file, filename, classname, output});
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
     if (!matches) return { filename: filename, line: 1 };
 
