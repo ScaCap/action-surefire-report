@@ -92,6 +92,11 @@ describe('resolvePath', () => {
         const path = await resolvePath('CalcUtilsTest');
         expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
     });
+
+    it('should find correct file when extension is included', async () => {
+        const path = await resolvePath('CalcUtilsTest.kt');
+        expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
+    });
 });
 
 describe('parseFile', () => {
