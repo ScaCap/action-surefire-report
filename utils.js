@@ -125,6 +125,7 @@ const parseTestReports = async reportPaths => {
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
+        console.log("logging...");
         const { count: c, skipped: s, annotations: a } = await parseFile(file);
         console.log({count, skipped, annotations});
         if (c == 0) continue;
