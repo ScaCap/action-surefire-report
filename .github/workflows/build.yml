@@ -6,7 +6,7 @@ on:
       - master
 
 concurrency:
-  cancel-in-progress: build-2-${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
   group: ${{ github.ref }}
 
 permissions: write-all
