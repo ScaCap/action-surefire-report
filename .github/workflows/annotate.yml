@@ -19,8 +19,3 @@ jobs:
       - uses: scacap/action-surefire-report@v1
         with:
           check_name: Example Surefire Test Report
-
-
-
-  
-
