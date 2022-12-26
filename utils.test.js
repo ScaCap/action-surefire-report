@@ -1,14 +1,14 @@
-const {resolveFileAndLine, resolvePath, parseFile} = require('./utils');
+const { resolveFileAndLine, resolvePath, parseFile } = require('./utils');
 
 describe('resolveFileAndLine', () => {
     it('should default to 1 if no line found', () => {
-        const {filename, line} = resolveFileAndLine(null, 'someClassName', 'not a stacktrace', false);
+        const { filename, line } = resolveFileAndLine(null, 'someClassName', 'not a stacktrace');
         expect(filename).toBe('someClassName');
         expect(line).toBe(1);
     });
 
     it('should parse correctly filename and line for a Java file', () => {
-        const {filename, line} = resolveFileAndLine(
+        const { filename, line } = resolveFileAndLine(
             null,
             'action.surefire.report.email.EmailAddressTest',
             `
@@ -41,7 +41,7 @@ Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero d
     });
 
     it('should parse correctly filename and line for extended stacktrace', () => {
-        const {filename, line} = resolveFileAndLine(
+        const { filename, line } = resolveFileAndLine(
             null,
             'action.surefire.report.calc.StringUtilsTest',
             `
@@ -65,7 +65,7 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
     });
 
     it('should parse correctly filename and line for pytest', () => {
-        const {filename, line} = resolveFileAndLine(
+        const { filename, line } = resolveFileAndLine(
             'test.py',
             'anything',
             `
@@ -116,7 +116,7 @@ describe('resolvePath', () => {
 
 describe('parseFile', () => {
     it('should parse CalcUtils results', async () => {
-        const {count, skipped, annotations} = await parseFile(
+        const { count, skipped, annotations } = await parseFile(
             'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
         );
 
@@ -151,7 +151,7 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse pytest results', async () => {
-        const {count, skipped, annotations} = await parseFile('python/report.xml');
+        const { count, skipped, annotations } = await parseFile('python/report.xml');
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
@@ -164,9 +164,9 @@ describe('parseFile', () => {
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'test_sample.test_which_fails',
-                message: 'AssertionError: assert \'test\' == \'xyz\'\n  - xyz\n  + test',
+                message: "AssertionError: assert 'test' == 'xyz'\n  - xyz\n  + test",
                 raw_details:
-                    'def test_which_fails():\n        event = { \'attr\': \'test\'}\n>       assert event[\'attr\'] == \'xyz\'\nE       AssertionError: assert \'test\' == \'xyz\'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError'
+                    "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError"
             },
             {
                 path: 'python/test_sample.py',
@@ -176,9 +176,9 @@ describe('parseFile', () => {
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'test_sample.test_with_error',
-                message: 'AttributeError: \'dict\' object has no attribute \'attr\'',
+                message: "AttributeError: 'dict' object has no attribute 'attr'",
                 raw_details:
-                    'def test_with_error():\n        event = { \'attr\': \'test\'}\n>       assert event.attr == \'test\'\nE       AttributeError: \'dict\' object has no attribute \'attr\'\n\npython/test_sample.py:14: AttributeError'
+                    "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\npython/test_sample.py:14: AttributeError"
             }
         ]);
     });
@@ -226,7 +226,7 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse custom report with details as an array', async () => {
-        const {count, skipped, annotations} = await parseFile(
+        const { count, skipped, annotations } = await parseFile(
             'custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'
         );
 
@@ -281,7 +281,7 @@ describe('parseFile', () => {
     });
 
     it('should parse custom report with flaky failures', async () => {
-        const {count, skipped, annotations} = await parseFile(
+        const { count, skipped, annotations } = await parseFile(
             'custom_reports/TEST-test.MyIntegrationTestSuite.xml'
         );
 

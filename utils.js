@@ -81,6 +81,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                     '';
                 testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
                 const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
+
                 const message = (
                     (testcase.failure &&
                         testcase.failure._attributes &&
