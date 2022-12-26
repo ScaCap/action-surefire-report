@@ -1,0 +1,26 @@
+name: Annotate checks
+
+on:
+  workflow_run:
+    workflows: ["build-2"]
+    types:
+      - completed
+  
+
+jobs:
+  annotate:
+    if: github.repository_owner == 'trinodb'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Download artifact'
+        uses: actions/download-artifact@v3
+        with:
+          name: java-reports
+      - uses: scacap/action-surefire-report@v1
+        with:
+          check_name: Example Surefire Test Report
+
+
+
+  
+
