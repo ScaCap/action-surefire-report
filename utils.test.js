@@ -182,6 +182,49 @@ describe('parseFile', () => {
             }
         ]);
     });
+    it('should parse go results', async () => {
+        const {count, skipped, annotations} = await parseFile('go/report.xml', true);
+
+        expect(count).toBe(3);
+        expect(skipped).toBe(0);
+        expect.arrayC
+        expect(annotations).toStrictEqual([
+            {
+                path: 'go/main_test.go',
+                start_line: 12,
+                end_line: 12,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'main_test.go.TestFailing',
+                message: 'Failed',
+                raw_details: 'main_test.go:12: failing test'
+            },
+            {
+                path: 'go/utils/string_test.go',
+                start_line: 7,
+                end_line: 7,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'string_test.go.TestFailing',
+                message: 'Failed',
+                raw_details: `string_test.go:7: 
+        \tError Trace:\t/Users/ghaiszaher/IdeaProjects/action-surefire-report/go/utils/string_test.go:7
+        \tError:      \tNot equal: 
+        \t            \texpected: "1"
+        \t            \tactual  : "2"
+        \t            \t
+        \t            \tDiff:
+        \t            \t--- Expected
+        \t            \t+++ Actual
+        \t            \t@@ -1 +1 @@
+        \t            \t-1
+        \t            \t+2
+        \tTest:       \tTestFailing`
+            },
+        ]);
+    });
     it('should parse custom report with details as an array', async () => {
         const {count, skipped, annotations} = await parseFile(
             'custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'

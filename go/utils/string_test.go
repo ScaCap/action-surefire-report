@@ -1,7 +1,8 @@
 package utils
 
 import "testing"
+import "github.com/stretchr/testify/assert"
 
-func TestPassing(t *testing.T) {
-	t.Error("failing test")
+func TestFailing(t *testing.T) {
+	assert.Equal(t, "1", "2")
 }
