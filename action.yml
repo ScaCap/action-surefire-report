@@ -12,6 +12,10 @@ inputs:
     description: 'surefire/failsafe/junit compatible xml report paths in glob format'
     required: false
     default: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml'
+  create_check:
+    description: 'create a new check with annotations'
+    required: false
+    default: 'true'
   check_name:
     description: 'check name for test reports'
     required: false

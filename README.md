@@ -13,6 +13,10 @@ This action processes maven surefire or failsafe XML reports on pull requests an
 
 Optional. [Glob](https://github.com/actions/toolkit/tree/master/packages/glob) expression to surefire or failsafe report paths. The default is `**/surefire-reports/TEST-*.xml`.
 
+### `create_check`
+
+Optional. Set to `false` to add annotations to the current job where this action is being executed. The default is `true`.
+
 ### `check_name`
 
 Optional. Check name to use when creating a check run. The default is `Test Report`.
