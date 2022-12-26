@@ -210,18 +210,18 @@ describe('parseFile', () => {
                 title: 'string_test.go.TestFailing',
                 message: 'Failed',
                 raw_details: expect.stringMatching(new RegExp(`string_test.go:7: 
-        \tError Trace:\t(.*)action-surefire-report/go/utils/string_test.go:7
-        \tError:      \tNot equal: 
-        \t            \texpected: "1"
-        \t            \tactual  : "2"
-        \t            \t
-        \t            \tDiff:
-        \t            \t--- Expected
-        \t            \t\\+\\+\\+ Actual
-        \t            \t@@ -1 \\+1 @@
-        \t            \t-1
-        \t            \t\\+2
-        \tTest:       \tTestFailing`))
+\\s*Error Trace:.*action-surefire-report/go/utils/string_test.go:7
+\\s*Error:     \\s*Not equal: 
+\\s*expected: "1"
+\\s*actual  : "2"
+\\s*
+\\s*Diff:
+\\s*--- Expected
+\\s*\\+\\+\\+ Actual
+\\s*@@ -1 \\+1 @@
+\\s*-1
+\\s*\\+2
+\\s*Test:\\s*TestFailing`))
             },
         ]);
     });
