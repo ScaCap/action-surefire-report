@@ -187,7 +187,6 @@ describe('parseFile', () => {
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
-        expect.arrayC
         expect(annotations).toStrictEqual([
             {
                 path: 'go/main_test.go',
