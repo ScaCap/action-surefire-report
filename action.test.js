@@ -12,9 +12,15 @@ const {
 
 jest.setTimeout(20000);
 
-let inputs = {};
-let outputs = {};
-let failed = null;
+let inputs;
+let outputs;
+let failed;
+
+beforeEach(() => {
+    inputs = {};
+    outputs = {};
+    failed = null;
+});
 
 describe('action should work', () => {
     beforeAll(() => {
