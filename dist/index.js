@@ -18,8 +18,9 @@ const action = async () => {
     const failOnFailedTests = core.getInput('fail_on_test_failures') === 'true';
     const failIfNoTests = core.getInput('fail_if_no_tests') === 'true';
     const skipPublishing = core.getInput('skip_publishing') === 'true';
+    const isFilenameInOutput = core.getInput('file_name_in_stack_trace') === 'true';
 
-    let { count, skipped, annotations } = await parseTestReports(reportPaths);
+    let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInOutput);
     const foundResults = count > 0 || skipped > 0;
     const conclusion =
         (foundResults && annotations.length === 0) || (!foundResults && !failIfNoTests)
@@ -14470,8 +14471,7 @@ const core = __nccwpck_require__(2186);
 const fs = __nccwpck_require__(7147);
 const parser = __nccwpck_require__(8821);
 
-const resolveFileAndLine = (file, classname, output) => {
-    const isFilenameInOutput = core.getInput('file_name_in_stack_trace') === 'true';
+const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     // extract filename from classname and remove suffix
     let filename;
     if (isFilenameInOutput) {
@@ -14479,22 +14479,21 @@ const resolveFileAndLine = (file, classname, output) => {
     } else {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
     }
-    console.log({file, filename, classname, output});
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
-    console.log({matches});
-    if (!matches) return {filename: filename, line: 1};
+    if (!matches) return { filename: filename, line: 1 };
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');
-    core.info(`Resolved file ${filename} and line ${line}`);
+    core.debug(`Resolved file ${filename} and line ${line}`);
+
     return { filename, line: parseInt(line) };
 };
 
 const resolvePath = async filename => {
-    core.info(`Resolving path for ${filename}`);
+    core.debug(`Resolving path for ${filename}`);
     const globber = await glob.create([`**/${filename}.*`, `**/${filename}`].join('\n'), { followSymbolicLinks: false });
     const results = await globber.glob();
-    core.info(`Matched files: ${results}`);
+    core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
 
     let path = '';
@@ -14506,17 +14505,17 @@ const resolvePath = async filename => {
     } else {
         path = filename;
     }
-    core.info(`Resolved path: ${path}`);
+    core.debug(`Resolved path: ${path}`);
 
     // canonicalize to make windows paths use forward slashes
     const canonicalPath = path.replace(/\\/g, '/');
-    core.info(`Canonical path: ${canonicalPath}`);
+    core.debug(`Canonical path: ${canonicalPath}`);
 
     return canonicalPath;
 };
 
-async function parseFile(file) {
-    core.info(`Parsing file ${file}`);
+async function parseFile(file, isFilenameInStackTrace) {
+    core.debug(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
     let annotations = [];
@@ -14540,8 +14539,6 @@ async function parseFile(file) {
             count++;
             if (testcase.skipped) skipped++;
             if (testcase.failure || testcase.flakyFailure || testcase.error) {
-                console.log('testcase:');
-                console.log(testcase);
                 let testcaseData =
                     (testcase.failure && testcase.failure._cdata) ||
                     (testcase.failure && testcase.failure._text) ||
@@ -14552,7 +14549,6 @@ async function parseFile(file) {
                     '';
                 testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
                 const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
-                core.info(`stackTrace: ${stackTrace}`)
                 const message = (
                     (testcase.failure &&
                         testcase.failure._attributes &&
@@ -14565,12 +14561,12 @@ async function parseFile(file) {
                         testcase.error._attributes.message) ||
                     stackTrace.split('\n').slice(0, 2).join('\n')
                 ).trim();
-                core.info(`message: ${message}`)
 
                 const { filename, line } = resolveFileAndLine(
                     testcase._attributes.file,
                     testcase._attributes.classname,
-                    stackTrace
+                    stackTrace,
+                    isFilenameInStackTrace
                 );
 
                 const path = await resolvePath(filename);
@@ -14594,14 +14590,13 @@ async function parseFile(file) {
     return { count, skipped, annotations };
 }
 
-const parseTestReports = async reportPaths => {
+const parseTestReports = async (reportPaths, isFilenameInStackTrace) => {
     const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
     let annotations = [];
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
-        const { count: c, skipped: s, annotations: a } = await parseFile(file);
-        core.info(JSON.stringify({count, skipped, annotations}));
+        const { count: c, skipped: s, annotations: a } = await parseFile(file, isFilenameInStackTrace);
         if (c == 0) continue;
         count += c;
         skipped += s;

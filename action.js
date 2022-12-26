@@ -12,8 +12,9 @@ const action = async () => {
     const failOnFailedTests = core.getInput('fail_on_test_failures') === 'true';
     const failIfNoTests = core.getInput('fail_if_no_tests') === 'true';
     const skipPublishing = core.getInput('skip_publishing') === 'true';
+    const isFilenameInOutput = core.getInput('file_name_in_stack_trace') === 'true';
 
-    let { count, skipped, annotations } = await parseTestReports(reportPaths);
+    let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInOutput);
     const foundResults = count > 0 || skipped > 0;
     const conclusion =
         (foundResults && annotations.length === 0) || (!foundResults && !failIfNoTests)

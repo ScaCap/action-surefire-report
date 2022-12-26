@@ -3,8 +3,7 @@ const core = require('@actions/core');
 const fs = require('fs');
 const parser = require('xml-js');
 
-const resolveFileAndLine = (file, classname, output) => {
-    const isFilenameInOutput = core.getInput('file_name_in_stack_trace') === 'true';
+const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     // extract filename from classname and remove suffix
     let filename;
     if (isFilenameInOutput) {
@@ -47,7 +46,7 @@ const resolvePath = async filename => {
     return canonicalPath;
 };
 
-async function parseFile(file) {
+async function parseFile(file, isFilenameInStackTrace) {
     core.debug(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
@@ -98,7 +97,8 @@ async function parseFile(file) {
                 const { filename, line } = resolveFileAndLine(
                     testcase._attributes.file,
                     testcase._attributes.classname,
-                    stackTrace
+                    stackTrace,
+                    isFilenameInStackTrace
                 );
 
                 const path = await resolvePath(filename);
@@ -122,13 +122,13 @@ async function parseFile(file) {
     return { count, skipped, annotations };
 }
 
-const parseTestReports = async reportPaths => {
+const parseTestReports = async (reportPaths, isFilenameInStackTrace) => {
     const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
     let annotations = [];
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
-        const { count: c, skipped: s, annotations: a } = await parseFile(file);
+        const { count: c, skipped: s, annotations: a } = await parseFile(file, isFilenameInStackTrace);
         if (c == 0) continue;
         count += c;
         skipped += s;

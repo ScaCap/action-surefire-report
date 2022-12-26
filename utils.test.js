@@ -1,28 +1,29 @@
-const { resolveFileAndLine, resolvePath, parseFile } = require('./utils');
+const {resolveFileAndLine, resolvePath, parseFile} = require('./utils');
 
 describe('resolveFileAndLine', () => {
     it('should default to 1 if no line found', () => {
-        const { filename, line } = resolveFileAndLine(null, 'someClassName', 'not a stacktrace');
+        const {filename, line} = resolveFileAndLine(null, 'someClassName', 'not a stacktrace', false);
         expect(filename).toBe('someClassName');
         expect(line).toBe(1);
     });
 
     it('should parse correctly filename and line for a Java file', () => {
-        const { filename, line } = resolveFileAndLine(
+        const {filename, line} = resolveFileAndLine(
             null,
             'action.surefire.report.email.EmailAddressTest',
             `
 action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
     at action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)
     at action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)
-        `
+        `,
+            false,
         );
         expect(filename).toBe('EmailAddressTest');
         expect(line).toBe(39);
     });
 
     it('should parse correctly filename and line for a Kotlin file', () => {
-        const { filename, line } = resolveFileAndLine(
+        const {filename, line} = resolveFileAndLine(
             null,
             'action.surefire.report.calc.CalcUtilsTest',
             `
@@ -32,14 +33,15 @@ Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero d
     at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)
     at action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)
     at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
-        `
+        `,
+            false,
         );
         expect(filename).toBe('CalcUtilsTest');
         expect(line).toBe(27);
     });
 
     it('should parse correctly filename and line for extended stacktrace', () => {
-        const { filename, line } = resolveFileAndLine(
+        const {filename, line} = resolveFileAndLine(
             null,
             'action.surefire.report.calc.StringUtilsTest',
             `
@@ -55,14 +57,15 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
 	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
-`
+`,
+            false,
         );
         expect(filename).toBe('StringUtilsTest');
         expect(line).toBe(26);
     });
 
     it('should parse correctly filename and line for pytest', () => {
-        const { filename, line } = resolveFileAndLine(
+        const {filename, line} = resolveFileAndLine(
             'test.py',
             'anything',
             `
@@ -73,10 +76,22 @@ event = { 'attr': 'test'}
 E AttributeError: 'dict' object has no attribute 'attr'
 
 test.py:14: AttributeError
-`
+`,
+            false
         );
         expect(filename).toBe('test.py');
         expect(line).toBe(14);
+    });
+
+    it('should parse correctly filename and line for a Go file when filename is in stack trace', () => {
+        const {filename, line} = resolveFileAndLine(
+            null,
+            'com/ScaCap/action-surefire-report',
+            'main_test.go:8: failing test',
+            true,
+        );
+        expect(filename).toBe('main_test.go');
+        expect(line).toBe(8);
     });
 });
 
@@ -101,7 +116,7 @@ describe('resolvePath', () => {
 
 describe('parseFile', () => {
     it('should parse CalcUtils results', async () => {
-        const { count, skipped, annotations } = await parseFile(
+        const {count, skipped, annotations} = await parseFile(
             'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
         );
 
@@ -136,7 +151,7 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse pytest results', async () => {
-        const { count, skipped, annotations } = await parseFile('python/report.xml');
+        const {count, skipped, annotations} = await parseFile('python/report.xml');
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
@@ -149,9 +164,9 @@ describe('parseFile', () => {
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'test_sample.test_which_fails',
-                message: "AssertionError: assert 'test' == 'xyz'\n  - xyz\n  + test",
+                message: 'AssertionError: assert \'test\' == \'xyz\'\n  - xyz\n  + test',
                 raw_details:
-                    "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError"
+                    'def test_which_fails():\n        event = { \'attr\': \'test\'}\n>       assert event[\'attr\'] == \'xyz\'\nE       AssertionError: assert \'test\' == \'xyz\'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError'
             },
             {
                 path: 'python/test_sample.py',
@@ -161,14 +176,14 @@ describe('parseFile', () => {
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'test_sample.test_with_error',
-                message: "AttributeError: 'dict' object has no attribute 'attr'",
+                message: 'AttributeError: \'dict\' object has no attribute \'attr\'',
                 raw_details:
-                    "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\npython/test_sample.py:14: AttributeError"
+                    'def test_with_error():\n        event = { \'attr\': \'test\'}\n>       assert event.attr == \'test\'\nE       AttributeError: \'dict\' object has no attribute \'attr\'\n\npython/test_sample.py:14: AttributeError'
             }
         ]);
     });
     it('should parse custom report with details as an array', async () => {
-        const { count, skipped, annotations } = await parseFile(
+        const {count, skipped, annotations} = await parseFile(
             'custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'
         );
 
@@ -223,7 +238,7 @@ describe('parseFile', () => {
     });
 
     it('should parse custom report with flaky failures', async () => {
-        const { count, skipped, annotations } = await parseFile(
+        const {count, skipped, annotations} = await parseFile(
             'custom_reports/TEST-test.MyIntegrationTestSuite.xml'
         );
 
