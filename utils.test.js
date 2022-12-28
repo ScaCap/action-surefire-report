@@ -15,7 +15,8 @@ describe('resolveFileAndLine', () => {
 action.surefire.report.email.InvalidEmailAddressException: Invalid email address 'user@ñandú.com.ar'
     at action.surefire.report.email.EmailAddressTest.expectException(EmailAddressTest.java:74)
     at action.surefire.report.email.EmailAddressTest.shouldNotContainInternationalizedHostNames(EmailAddressTest.java:39)
-        `
+        `,
+            false,
         );
         expect(filename).toBe('EmailAddressTest');
         expect(line).toBe(39);
@@ -32,7 +33,8 @@ Caused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero d
     at action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)
     at action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)
     at action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)
-        `
+        `,
+            false,
         );
         expect(filename).toBe('CalcUtilsTest');
         expect(line).toBe(27);
@@ -55,7 +57,8 @@ Stacktrace was: java.lang.IllegalArgumentException: Input='' didn't match condit
 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
 	at org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)
 	at org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)
-`
+`,
+            false,
         );
         expect(filename).toBe('StringUtilsTest');
         expect(line).toBe(26);
@@ -73,10 +76,22 @@ event = { 'attr': 'test'}
 E AttributeError: 'dict' object has no attribute 'attr'
 
 test.py:14: AttributeError
-`
+`,
+            false
         );
         expect(filename).toBe('test.py');
         expect(line).toBe(14);
+    });
+
+    it('should parse correctly filename and line for a Go file when filename is in stack trace', () => {
+        const {filename, line} = resolveFileAndLine(
+            null,
+            'com/ScaCap/action-surefire-report',
+            'main_test.go:8: failing test',
+            true,
+        );
+        expect(filename).toBe('main_test.go');
+        expect(line).toBe(8);
     });
 });
 
@@ -90,6 +105,11 @@ describe('resolvePath', () => {
 
     it('should find correct file for Kotlin filename', async () => {
         const path = await resolvePath('CalcUtilsTest');
+        expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
+    });
+
+    it('should find correct file when extension is included', async () => {
+        const path = await resolvePath('CalcUtilsTest.kt');
         expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
     });
 });
@@ -160,6 +180,49 @@ describe('parseFile', () => {
                 raw_details:
                     "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\npython/test_sample.py:14: AttributeError"
             }
+        ]);
+    });
+    it('should parse go results', async () => {
+        const {count, skipped, annotations} = await parseFile('go/report.xml', true);
+
+        expect(count).toBe(3);
+        expect(skipped).toBe(0);
+        // noinspection RegExpRepeatedSpace
+        expect(annotations).toStrictEqual([
+            {
+                path: 'go/main_test.go',
+                start_line: 12,
+                end_line: 12,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'main_test.go.TestFailing',
+                message: 'Failed',
+                raw_details: 'main_test.go:12: failing test'
+            },
+            {
+                path: 'go/utils/string_test.go',
+                start_line: 7,
+                end_line: 7,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'string_test.go.TestFailing',
+                message: 'Failed',
+                raw_details: expect.stringMatching(new RegExp(`string_test.go:7: 
+\\s*Error Trace:.*action-surefire-report/go/utils/string_test.go:7
+\\s*Error:     \\s*Not equal: 
+\\s*expected: "1"
+\\s*actual  : "2"
+\\s*
+\\s*Diff:
+\\s*--- Expected
+\\s*\\+\\+\\+ Actual
+\\s*@@ -1 \\+1 @@
+\\s*-1
+\\s*\\+2
+\\s*Test:\\s*TestFailing`))
+            },
         ]);
     });
     it('should parse custom report with details as an array', async () => {
