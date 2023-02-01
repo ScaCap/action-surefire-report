@@ -42,7 +42,7 @@
     "@octokit/fixtures": "22.0.6",
     "@vercel/ncc": "0.36.0",
     "enzyme": "3.11.0",
-    "eslint": "8.31.0",
+    "eslint": "8.33.0",
     "jest": "29.3.1",
     "jest-junit": "15.0.0",
     "nock": "13.2.9"
