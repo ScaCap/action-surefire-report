@@ -39,6 +39,11 @@ inputs:
     description: 'get filename from stack trace'
     required: false
     default: 'false'
+  github_base_url:
+    description: 'If you use Github Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3)'
+    required: false
+    default: ""
+
 outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
