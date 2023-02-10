@@ -62,7 +62,7 @@ jobs:
       - name: Build and Run Tests
         run: mvn test --batch-mode --fail-at-end
       - name: Publish Test Report
-        if: ${{ always() }}
+        if: success() || failure()
         uses: scacap/action-surefire-report@v1
 ```
 
