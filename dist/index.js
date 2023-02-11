@@ -43,7 +43,8 @@ const action = async () => {
         const status = 'completed';
         const head_sha = commit || (pullRequest && pullRequest.head.sha) || github.context.sha;
 
-        const octokit = new RetryingOctokit({baseUrl: githubBaseUrl,auth: githubToken, request: { retries: 3 }});
+        console.log(`githubBaseUrl: ${githubBaseUrl}`);
+        const octokit = new RetryingOctokit({baseUrl: githubBaseUrl, auth: githubToken, request: { retries: 3 }});
         if (createCheck) {
             core.info(`Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`);
             const createCheckRequest = {
