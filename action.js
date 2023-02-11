@@ -26,6 +26,16 @@ const action = async () => {
             ? 'success'
             : 'failure';
 
+    function buildRetryingOctokitClient() {
+        const baseRequest = { auth: githubToken, request: { retries: 3 } };
+
+        if (githubBaseUrl){
+            baseRequest.baseUrl = githubBaseUrl;
+        }
+
+        return new RetryingOctokit(baseRequest)
+    }
+
     if (!skipPublishing) {
         const title = foundResults
             ? `${count} tests run, ${skipped} skipped, ${annotations.length} failed.`
@@ -37,7 +47,7 @@ const action = async () => {
         const status = 'completed';
         const head_sha = commit || (pullRequest && pullRequest.head.sha) || github.context.sha;
 
-        const octokit = new RetryingOctokit({baseUrl: githubBaseUrl,auth: githubToken, request: { retries: 3 }});
+        const octokit = buildRetryingOctokitClient();
         if (createCheck) {
             core.info(`Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`);
             const createCheckRequest = {
