@@ -47,7 +47,7 @@ Optional. Set to `true` to get the file name from the stack trace. The default i
 
 ### `github_base_url`
 
-Optional : If you use GitHub Enterprise, you can set this to the URL of your server(e.g. https://github.myorg.com/api/v3). The default is https://api.github.com/
+Optional: If you use GitHub Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3).
 
 
 ## Example usage
