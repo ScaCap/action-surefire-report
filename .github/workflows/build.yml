@@ -17,16 +17,11 @@ jobs:
       checks: write
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-main-maven-
       - uses: actions/setup-java@v3
         with:
           java-version: 8
-          distribution: 'zulu'
+          distribution: 'temurin'
+          cache: 'maven'
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
       - uses: ./
         if: github.ref != 'refs/heads/master'
@@ -57,12 +52,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
+          cache: npm
       - run: npm install
       - run: npm run eslint
       - run: npm run test
