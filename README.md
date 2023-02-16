@@ -45,6 +45,11 @@ Optional. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`. The de
 
 Optional. Set to `true` to get the file name from the stack trace. The default is `false`.
 
+### `github_base_url`
+
+Optional: If you use GitHub Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3).
+
+
 ## Example usage
 
 ```yml

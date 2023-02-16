@@ -11,6 +11,7 @@ const { retry } = __nccwpck_require__(6298);
 const RetryingOctokit = Octokit.plugin(retry);
 const { parseTestReports } = __nccwpck_require__(1252);
 
+
 const action = async () => {
     const reportPaths = core.getInput('report_paths').split(',').join('\n');
     core.info(`Going to parse results form ${reportPaths}`);
@@ -22,6 +23,7 @@ const action = async () => {
     const failIfNoTests = core.getInput('fail_if_no_tests') === 'true';
     const skipPublishing = core.getInput('skip_publishing') === 'true';
     const isFilenameInStackTrace = core.getInput('file_name_in_stack_trace') === 'true';
+    const githubBaseUrl = core.getInput('github_base_url');
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInStackTrace);
     const foundResults = count > 0 || skipped > 0;
@@ -29,6 +31,16 @@ const action = async () => {
         (foundResults && annotations.length === 0) || (!foundResults && !failIfNoTests)
             ? 'success'
             : 'failure';
+
+    function buildRetryingOctokitClient() {
+        const baseRequest = { auth: githubToken, request: { retries: 3 } };
+
+        if (githubBaseUrl){
+            baseRequest.baseUrl = githubBaseUrl;
+        }
+
+        return new RetryingOctokit(baseRequest)
+    }
 
     if (!skipPublishing) {
         const title = foundResults
@@ -41,7 +53,7 @@ const action = async () => {
         const status = 'completed';
         const head_sha = commit || (pullRequest && pullRequest.head.sha) || github.context.sha;
 
-        const octokit = new RetryingOctokit({auth: githubToken, request: { retries: 3 }});
+        const octokit = buildRetryingOctokitClient();
         if (createCheck) {
             core.info(`Posting status '${status}' with conclusion '${conclusion}' to ${link} (sha: ${head_sha})`);
             const createCheckRequest = {
@@ -68,11 +80,11 @@ const action = async () => {
                 status: 'in_progress'
             })
             core.debug(JSON.stringify(check_runs, null, 2));
-            if (check_runs.length == 0) {
+            if (check_runs.length === 0) {
                 core.setFailed(`Did not find any in progress '${name}' check for sha ${head_sha}`);
                 return;
             }
-            if (check_runs.length != 1) {
+            if (check_runs.length !== 1) {
                 core.setFailed(`Found multiple in progress '${name}' checks for sha ${head_sha}`);
                 return;
             }
