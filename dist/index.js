@@ -18443,7 +18443,7 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     let filenameWithPackage;
     if (isFilenameInOutput) {
         filename = output.split(':')[0].trim();
-        filenameWithPackage = filename // FIXME: is this correct?
+        filenameWithPackage = filename
     } else {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
         filenameWithPackage = classname.replace(/\./g, "/");
