@@ -9,7 +9,7 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     let filenameWithPackage;
     if (isFilenameInOutput) {
         filename = output.split(':')[0].trim();
-        filenameWithPackage = filename // FIXME: is this correct?
+        filenameWithPackage = filename
     } else {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
         filenameWithPackage = classname.replace(/\./g, "/");
@@ -19,7 +19,7 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');
-    core.debug(`Resolved file ${filenameWithPackage} with name {filename} and line ${line}`);
+    core.debug(`Resolved file ${filenameWithPackage} with name ${filename} and line ${line}`);
 
     return { filename, filenameWithPackage, line: parseInt(line) };
 };
