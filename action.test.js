@@ -191,7 +191,7 @@ describe('action should work', () => {
             await action();
             scope.done();
 
-            expect(failed).toBe('There were 11 failed tests');
+            expect(failed).toBe('There were 12 failed tests');
         });
     });
 

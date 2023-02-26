@@ -234,7 +234,7 @@ describe('parseFile', () => {
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
             {
-                path: 'ListUtilTest',
+                path: 'pro/taskana/common/api/ListUtilTest(H2)',
                 start_line: 22,
                 end_line: 22,
                 start_column: 0,
@@ -289,7 +289,7 @@ describe('parseFile', () => {
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
             {
-                path: 'MyIntegrationTest',
+                path: 'test/MyIntegrationTest',
                 start_line: 1,
                 end_line: 1,
                 start_column: 0,
@@ -303,7 +303,7 @@ describe('parseFile', () => {
                 raw_details: ''
             },
             {
-                path: 'DocumentUploadIntegrationTest',
+                path: 'test/DocumentUploadIntegrationTest',
                 start_line: 33,
                 end_line: 33,
                 start_column: 0,
@@ -317,7 +317,7 @@ describe('parseFile', () => {
                     '\tat test.DocumentUploadIntegrationTest.shouldReturnBadRequestIfDocumentTypeIsInvalid(DocumentUploadIntegrationTest.java:33)'
             },
             {
-                path: 'DocumentUploadIntegrationTest',
+                path: 'test/DocumentUploadIntegrationTest',
                 start_line: 1,
                 end_line: 1,
                 start_column: 0,
@@ -328,7 +328,7 @@ describe('parseFile', () => {
                 raw_details: ''
             },
             {
-                path: 'DocumentUploadIntegrationTest',
+                path: 'test/DocumentUploadIntegrationTest',
                 start_line: 47,
                 end_line: 47,
                 start_column: 0,
