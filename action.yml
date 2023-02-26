@@ -12,6 +12,10 @@ inputs:
     description: 'surefire/failsafe/junit compatible xml report paths in glob format'
     required: false
     default: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml'
+  create_check:
+    description: 'create a new check with annotations'
+    required: false
+    default: 'true'
   check_name:
     description: 'check name for test reports'
     required: false
@@ -27,10 +31,23 @@ inputs:
     description: 'fail run if there were no test results found'
     required: false
     default: 'true'
+  skip_publishing:
+    description: 'skip test report publishing'
+    required: false
+    default: 'false'
+  file_name_in_stack_trace:
+    description: 'get filename from stack trace'
+    required: false
+    default: 'false'
+  github_base_url:
+    description: 'if you use Github Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3)'
+    required: false
+    default: ""
+
 outputs:
   outcome:
      description: 'the test outcome, either `success` or `failure`'
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

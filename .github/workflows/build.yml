@@ -5,42 +5,54 @@ on:
     branches:
       - master
 
+concurrency:
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  group: ${{ github.ref }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
     steps:
-      - uses: actions/checkout@v1
-      - uses: actions/cache@v1
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-main-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-main-maven-
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: 8
+          distribution: 'temurin'
+          cache: 'maven'
       - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
-      - uses: scacap/action-surefire-report@master
-        if: endsWith(github.ref, 'master') == false
+      - uses: ./
+        if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Surefire Test Report
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
           args: pytest  --junit-xml=python/report.xml python/ || exit 0
-      - uses: scacap/action-surefire-report@master
-        if: endsWith(github.ref, 'master') == false
+      - uses: ./
+        if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Pytest Report
           report_paths: python/report.xml
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-go@v3
         with:
-          node-version: 12
-      - uses: actions/cache@v1
+          go-version: 1.18.x
+      - run: |
+          cd go && 
+            go install github.com/jstemmer/go-junit-report/v2@latest &&
+            go test -v 2>&1 ./... |
+            go-junit-report -out report.xml
+      - uses: ./
+        if: github.ref != 'refs/heads/master'
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-cache-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-cache-
+          check_name: Example Go Report
+          report_paths: go/report.xml
+          file_name_in_stack_trace: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
       - run: npm install
       - run: npm run eslint
       - run: npm run test

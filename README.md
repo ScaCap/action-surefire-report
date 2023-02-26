@@ -13,6 +13,10 @@ This action processes maven surefire or failsafe XML reports on pull requests an
 
 Optional. [Glob](https://github.com/actions/toolkit/tree/master/packages/glob) expression to surefire or failsafe report paths. The default is `**/surefire-reports/TEST-*.xml`.
 
+### `create_check`
+
+Optional. Set to `false` to add annotations to the current job where this action is being executed. The default is `true`.
+
 ### `check_name`
 
 Optional. Check name to use when creating a check run. The default is `Test Report`.
@@ -29,9 +33,22 @@ Optional. Check will fail if there are test failures. The default is `false`.
 
 Optional. Check will fail if no tests were found. The default is `true`.
 
+### `skip_publishing`
+
+Optional. Skip the test report publishing (check run creation). The default is `false`.
+
 ### `github_token`
 
 Optional. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`. The default is `${{ github.token }}`.
+
+### `file_name_in_stack_trace`
+
+Optional. Set to `true` to get the file name from the stack trace. The default is `false`.
+
+### `github_base_url`
+
+Optional: If you use GitHub Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3).
+
 
 ## Example usage
 
@@ -50,7 +67,7 @@ jobs:
       - name: Build and Run Tests
         run: mvn test --batch-mode --fail-at-end
       - name: Publish Test Report
-        if: ${{ always() }}
+        if: success() || failure()
         uses: scacap/action-surefire-report@v1
 ```
 

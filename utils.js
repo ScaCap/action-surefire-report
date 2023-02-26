@@ -3,10 +3,17 @@ const core = require('@actions/core');
 const fs = require('fs');
 const parser = require('xml-js');
 
-const resolveFileAndLine = (file, classname, output) => {
+const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     // extract filename from classname and remove suffix
-    const filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
-    const filenameWithPackage = classname.replace(/\./g, "/");
+    let filename;
+    let filenameWithPackage;
+    if (isFilenameInOutput) {
+        filename = output.split(':')[0].trim();
+        filenameWithPackage = filename // FIXME: is this correct?
+    } else {
+        filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
+        filenameWithPackage = classname.replace(/\./g, "/");
+    }
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
     if (!matches) return { filename: filename, filenameWithPackage: filenameWithPackage, line: 1 };
 
@@ -19,7 +26,7 @@ const resolveFileAndLine = (file, classname, output) => {
 
 const resolvePath = async filenameWithPackage => {
     core.debug(`Resolving path for ${filenameWithPackage}`);
-    const globber = await glob.create(`**/${filenameWithPackage}.*`, { followSymbolicLinks: false });
+    const globber = await glob.create([`**/${filenameWithPackage}.*`, `**/${filenameWithPackage}`].join('\n'), { followSymbolicLinks: false });
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
@@ -27,7 +34,7 @@ const resolvePath = async filenameWithPackage => {
     let path = '';
     if (results.length) {
         // skip various temp folders
-        const found = results.find(r => !r.includes('__pycache__'));
+        const found = results.find(r => !r.includes('__pycache__') && !r.endsWith('.class'));
         if (found) path = found.slice(searchPath.length + 1);
         else path = filenameWithPackage;
     } else {
@@ -42,7 +49,7 @@ const resolvePath = async filenameWithPackage => {
     return canonicalPath;
 };
 
-async function parseFile(file) {
+async function parseFile(file, isFilenameInStackTrace) {
     core.debug(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
@@ -94,7 +101,8 @@ async function parseFile(file) {
                 const { filename, filenameWithPackage, line } = resolveFileAndLine(
                     testcase._attributes.file,
                     testcase._attributes.classname,
-                    stackTrace
+                    stackTrace,
+                    isFilenameInStackTrace
                 );
 
                 const path = await resolvePath(filenameWithPackage);
@@ -118,14 +126,14 @@ async function parseFile(file) {
     return { count, skipped, annotations };
 }
 
-const parseTestReports = async reportPaths => {
+const parseTestReports = async (reportPaths, isFilenameInStackTrace) => {
     const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
     let annotations = [];
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
-        const { count: c, skipped: s, annotations: a } = await parseFile(file);
-        if (c == 0) continue;
+        const { count: c, skipped: s, annotations: a } = await parseFile(file, isFilenameInStackTrace);
+        if (c === 0) continue;
         count += c;
         skipped += s;
         annotations = annotations.concat(a);

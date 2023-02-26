@@ -12,9 +12,15 @@ const {
 
 jest.setTimeout(20000);
 
-let inputs = {};
-let outputs = {};
-let failed = null;
+let inputs;
+let outputs;
+let failed;
+
+beforeEach(() => {
+    inputs = {};
+    outputs = {};
+    failed = null;
+});
 
 describe('action should work', () => {
     beforeAll(() => {
@@ -37,6 +43,7 @@ describe('action should work', () => {
         jest.spyOn(core, 'debug').mockImplementation(jest.fn());
 
         github.context.payload.pull_request = {
+            id: 1,
             html_url: 'https://github.com/scacap/action-surefire-report',
             head: { sha: 'sha123' }
         };
@@ -55,7 +62,8 @@ describe('action should work', () => {
             report_paths: '**/surefire-reports/TEST-*.xml, **/failsafe-reports/TEST-*.xml',
             github_token: 'GITHUB_TOKEN',
             check_name: 'Test Report',
-            fail_if_no_tests: 'true'
+            fail_if_no_tests: 'true',
+            skip_publishing: 'false'
         };
 
         // Reset outputs
@@ -149,6 +157,14 @@ describe('action should work', () => {
         scope.done();
 
         expect(request).toStrictEqual(masterSuccess);
+    });    
+    
+    it('should not send report on skip_publishing', async () => {
+        inputs.skip_publishing = 'true';
+
+        // nock error if the request is sent
+
+        await action();
     });
 
     describe('with option fail_on_test_failures', () => {
@@ -176,6 +192,48 @@ describe('action should work', () => {
             scope.done();
 
             expect(failed).toBe('There were 12 failed tests');
+        });
+    });
+
+    describe('with option create_check=false', () => {
+        it('should parse surefire reports and update a check run', async () => {
+            inputs.create_check = 'false';
+            inputs.check_name = 'build';
+            github.context.sha = 'sha123';
+            github.context.job = 'build'
+
+            let request = null;
+            const getRuns = nock('https://api.github.com')
+                .get('/repos/scacap/action-surefire-report/commits/sha123/check-runs?check_name=build&status=in_progress')
+                .reply(200, {
+                    check_runs: [
+                        {
+                            id: 123,
+                            output: {
+                                title: finishedWithFailures.output.title,
+                                summary: finishedWithFailures.output.summary
+                            },
+                            pull_requests: [
+                                {
+                                    id: 1
+                                }
+                            ]
+                        }
+                    ]
+                });
+            const patchRun = nock('https://api.github.com')
+                .patch('/repos/scacap/action-surefire-report/check-runs/123', body => {
+                    request = body;
+                    return body;
+                })
+                .reply(200, {});
+            await action();
+            getRuns.done();
+            patchRun.done();
+
+            expect(request).toStrictEqual({output: finishedWithFailures.output});
+            expect(outputs).toHaveProperty('conclusion', 'failure');
+            expect(failed).toBeNull();
         });
     });
 });
