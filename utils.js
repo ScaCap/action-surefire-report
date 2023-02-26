@@ -19,7 +19,7 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');
-    core.debug(`Resolved file ${filenameWithPackage} with name {filename} and line ${line}`);
+    core.debug(`Resolved file ${filenameWithPackage} with name ${filename} and line ${line}`);
 
     return { filename, filenameWithPackage, line: parseInt(line) };
 };
