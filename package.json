@@ -36,7 +36,7 @@
     "@actions/glob": "0.4.0",
     "@octokit/rest": "19.0.7",
     "@octokit/plugin-retry": "4.1.1",
-    "xml-js": "1.6.11"
+    "libxmljs": "0.19.10"
   },
   "devDependencies": {
     "@octokit/fixtures": "22.0.6",
