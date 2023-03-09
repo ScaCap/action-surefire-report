@@ -290,8 +290,8 @@ describe('parseFile', () => {
         expect(annotations).toStrictEqual([
             {
                 path: 'test/MyIntegrationTest',
-                start_line: 1,
-                end_line: 1,
+                start_line: 43,
+                end_line: 43,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
@@ -300,7 +300,16 @@ describe('parseFile', () => {
                     'JSON path "$.mails[0].subject"\n' +
                     'Expected: "MySubject"\n' +
                     '     but: was "YourSubject"',
-                raw_details: ''
+                raw_details:
+                    'java.lang.AssertionError: \n' +
+                    'JSON path "$.mails[0].subject"\n' +
+                    'Expected: "MySubject"\n' +
+                    '     but: was "YourSubject"\n' +
+                    '	at test.MyIntegrationTest.testGetMails(MyIntegrationTest.java:43)\n' +
+                    '\n' +
+                    '      2021-02-05 09:11:05.249  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet \'\'\n' +
+                    '2021-02-05 09:11:05.249  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet \'\'\n' +
+                    '2021-02-05 09:11:05.255  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 6 ms',
             },
             {
                 path: 'test/DocumentUploadIntegrationTest',
@@ -318,14 +327,20 @@ describe('parseFile', () => {
             },
             {
                 path: 'test/DocumentUploadIntegrationTest',
-                start_line: 1,
-                end_line: 1,
+                start_line: 23,
+                end_line: 23,
                 start_column: 0,
                 end_column: 0,
                 annotation_level: 'failure',
                 title: 'DocumentUploadIntegrationTest.shouldReturnSuccessResponse',
                 message: 'Status expected:<200> but was:<403>',
-                raw_details: ''
+                raw_details:
+                    'java.lang.AssertionError: Status expected:<200> but was:<403>\n' +
+                    '	at test.DocumentUploadIntegrationTest.shouldReturnSuccessResponse(DocumentUploadIntegrationTest.java:23)\n' +
+                    '\n' +
+                    '      2021-02-05 09:11:11.668  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet \'\'\n' +
+                    '2021-02-05 09:11:11.668  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet \'\'\n' +
+                    '2021-02-05 09:11:11.673  INFO [,,,] 2909 --- [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 5 ms',
             },
             {
                 path: 'test/DocumentUploadIntegrationTest',
