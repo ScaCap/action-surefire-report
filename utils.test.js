@@ -304,7 +304,7 @@ describe('parseFile', () => {
                     'java.lang.AssertionError: \n' +
                     'JSON path "$.mails[0].subject"\n' +
                     'Expected: "MySubject"\n' +
-                    '     but: was \"YourSubject\"\n' +
+                    '     but: was "YourSubject"\n' +
                     '	at test.MyIntegrationTest.testGetMails(MyIntegrationTest.java:43)\n' +
                     '\n' +
                     '      2021-02-05 09:11:05.249  INFO [,,,] 2909 --- [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet \'\'\n' +
