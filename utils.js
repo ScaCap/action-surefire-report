@@ -1,7 +1,7 @@
 const glob = require('@actions/glob');
 const core = require('@actions/core');
 const fs = require('fs');
-const libxmljs = require("libxmljs");
+const parser = require('xml-js');
 
 const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     // extract filename from classname and remove suffix
@@ -25,9 +25,6 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
 };
 
 const resolvePath = async filenameWithPackage => {
-    if (!filenameWithPackage) {
-        return '';
-    }
     core.debug(`Resolving path for ${filenameWithPackage}`);
     const globber = await glob.create([`**/${filenameWithPackage}.*`, `**/${filenameWithPackage}`].join('\n'), { followSymbolicLinks: false });
     const results = await globber.glob();
@@ -60,46 +57,70 @@ async function parseFile(file, isFilenameInStackTrace) {
 
     const data = await fs.promises.readFile(file);
 
-    const report = libxmljs.parseXml(data + "");
-    const testsuites = report.find('//testsuite');
+    const report = JSON.parse(parser.xml2json(data, { compact: true }));
+    const testsuites = report.testsuite
+        ? [report.testsuite]
+        : Array.isArray(report.testsuites.testsuite)
+            ? report.testsuites.testsuite
+            : [report.testsuites.testsuite];
 
     for (const testsuite of testsuites) {
-        const testcases = testsuite.find('testcase');
+        const testcases = Array.isArray(testsuite.testcase)
+            ? testsuite.testcase
+            : testsuite.testcase
+                ? [testsuite.testcase]
+                : [];
         for (const testcase of testcases) {
             count++;
-            skipped += testcase.find('skipped').length;
-            let failures = testcase.find('failure | flakyFailure | error');
-            if (failures.length == 0) {
-                continue;
+            if (testcase.skipped) skipped++;
+            if (testcase.failure || testcase.flakyFailure || testcase.error) {
+                let testcaseData =
+                    (testcase.failure && testcase.failure._cdata) ||
+                    (testcase.failure && testcase.failure._text) ||
+                    (testcase.flakyFailure && testcase.flakyFailure._cdata) ||
+                    (testcase.flakyFailure && testcase.flakyFailure._text) ||
+                    (testcase.error && testcase.error._cdata) ||
+                    (testcase.error && testcase.error._text) ||
+                    '';
+                testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
+                const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
+
+                const message = (
+                    (testcase.failure &&
+                        testcase.failure._attributes &&
+                        testcase.failure._attributes.message) ||
+                    (testcase.flakyFailure &&
+                        testcase.flakyFailure._attributes &&
+                        testcase.flakyFailure._attributes.message) ||
+                    (testcase.error &&
+                        testcase.error._attributes &&
+                        testcase.error._attributes.message) ||
+                    stackTrace.split('\n').slice(0, 2).join('\n')
+                ).trim();
+
+                const { filename, filenameWithPackage, line } = resolveFileAndLine(
+                    testcase._attributes.file,
+                    testcase._attributes.classname,
+                    stackTrace,
+                    isFilenameInStackTrace
+                );
+
+                const path = await resolvePath(filenameWithPackage);
+                const title = `${filename}.${testcase._attributes.name}`;
+                core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+
+                annotations.push({
+                    path,
+                    start_line: line,
+                    end_line: line,
+                    start_column: 0,
+                    end_column: 0,
+                    annotation_level: 'failure',
+                    title,
+                    message,
+                    raw_details: stackTrace
+                });
             }
-            const stackTrace = failures.map(failure => failure.text()).join('').trim();
-            const message = (
-                failures.map(failure => failure.attr('message')?.value()).join('') ||
-                stackTrace.split('\n').slice(0, 2).join('\n')
-            ).trim();
-
-            const { filename, filenameWithPackage, line } = resolveFileAndLine(
-                testcase.attr('file')?.value() || '',
-                testcase.attr('classname')?.value() || '',
-                stackTrace,
-                isFilenameInStackTrace
-            );
-
-            const path = await resolvePath(filenameWithPackage);
-            const title = `${filename}.${testcase.attr('name')?.value()}`;
-            core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
-
-            annotations.push({
-                path,
-                start_line: line,
-                end_line: line,
-                start_column: 0,
-                end_column: 0,
-                annotation_level: 'failure',
-                title,
-                message,
-                raw_details: stackTrace
-            });
         }
     }
     return { count, skipped, annotations };
