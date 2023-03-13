@@ -16563,7 +16563,7 @@ async function parseFile(file, isFilenameInStackTrace) {
 
     const data = await fs.promises.readFile(file);
 
-    const report = libxmljs.parseXml(data + "", {huge: true});
+    const report = libxmljs.parseXml(data + "");
     const testsuites = report.find('//testsuite');
 
     for (const testsuite of testsuites) {
