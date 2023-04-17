@@ -41,6 +41,8 @@ Optional. Skip the test report publishing (check run creation). The default is `
 
 Optional. Usually in form of `github_token: ${{ secrets.GITHUB_TOKEN }}`. The default is `${{ github.token }}`.
 
+The [permission](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#permissions) needed for the default token is `checks: 'write'`
+
 ### `file_name_in_stack_trace`
 
 Optional. Set to `true` to get the file name from the stack trace. The default is `false`.
