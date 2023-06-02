@@ -85,6 +85,17 @@ async function parseFile(file, isFilenameInStackTrace) {
                 testcaseData = Array.isArray(testcaseData) ? testcaseData : [testcaseData];
                 const stackTrace = (testcaseData.length ? testcaseData.join('') : '').trim();
 
+                core.debug(`testcase.failure._attributes.message: '${(testcase.failure &&
+                    testcase.failure._attributes &&
+                    testcase.failure._attributes.message)}'`)
+                core.debug(`testcase.flakyFailure._attributes.message: '${(testcase.flakyFailure &&
+                    testcase.flakyFailure._attributes &&
+                    testcase.flakyFailure._attributes.message)}'`)
+                core.debug(`testcase.error._attributes.message: '${(testcase.error &&
+                    testcase.error._attributes &&
+                    testcase.error._attributes.message)}'`)
+                core.debug(`stackTrace.split('\\n').slice(0, 2).join('\\n'): '${stackTrace.split('\n').slice(0, 2).join('\n')}'`)
+                core.debug(`testcase._attributes.name: '${testcase._attributes.name}'`)
                 const message = (
                     (testcase.failure &&
                         testcase.failure._attributes &&
@@ -96,7 +107,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                         testcase.error._attributes &&
                         testcase.error._attributes.message) ||
                     stackTrace.split('\n').slice(0, 2).join('\n') ||
-                    (testcase._attributes.name)
+                    testcase._attributes.name
                 ).trim();
 
                 const { filename, filenameWithPackage, line } = resolveFileAndLine(
