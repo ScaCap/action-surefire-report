@@ -95,7 +95,8 @@ async function parseFile(file, isFilenameInStackTrace) {
                     (testcase.error &&
                         testcase.error._attributes &&
                         testcase.error._attributes.message) ||
-                    stackTrace.split('\n').slice(0, 2).join('\n')
+                    stackTrace.split('\n').slice(0, 2).join('\n') ||
+                    testcase._attributes.name
                 ).trim();
 
                 const { filename, filenameWithPackage, line } = resolveFileAndLine(
