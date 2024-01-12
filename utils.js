@@ -58,11 +58,14 @@ async function parseFile(file, isFilenameInStackTrace) {
     const data = await fs.promises.readFile(file);
 
     const report = JSON.parse(parser.xml2json(data, { compact: true }));
+    core.debug(`parsed report: ${JSON.stringify(report)}`)
+
     const testsuites = report.testsuite
         ? [report.testsuite]
         : Array.isArray(report.testsuites.testsuite)
             ? report.testsuites.testsuite
             : [report.testsuites.testsuite];
+    core.debug(`test suites: ${JSON.stringify(testsuites)}`)
 
     for (const testsuite of testsuites) {
         const testcases = Array.isArray(testsuite.testcase)
