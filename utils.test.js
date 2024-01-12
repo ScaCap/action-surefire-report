@@ -99,32 +99,32 @@ describe('resolvePath', () => {
     it('should find correct file for Java filename', async () => {
         const path = await resolvePath('EmailAddressTest');
         expect(path).toBe(
-            'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java'
+            'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java'
         );
     });
 
     it('should find correct file for Kotlin filename', async () => {
         const path = await resolvePath('CalcUtilsTest');
-        expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
+        expect(path).toBe('integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
     });
 
     it('should find correct file when extension is included', async () => {
         const path = await resolvePath('CalcUtilsTest.kt');
-        expect(path).toBe('tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
+        expect(path).toBe('integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt');
     });
 });
 
 describe('parseFile', () => {
     it('should parse CalcUtils results', async () => {
         const { count, skipped, annotations } = await parseFile(
-            'tests/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
+            'integration-tests/maven/utils/target/surefire-reports/TEST-action.surefire.report.calc.CalcUtilsTest.xml'
         );
 
         expect(count).toBe(2);
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
                 start_line: 27,
                 end_line: 27,
                 start_column: 0,
@@ -137,7 +137,7 @@ describe('parseFile', () => {
                     'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)'
             },
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
                 start_line: 15,
                 end_line: 15,
                 start_column: 0,
@@ -151,13 +151,13 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse pytest results', async () => {
-        const { count, skipped, annotations } = await parseFile('python/report.xml');
+        const { count, skipped, annotations } = await parseFile('integration-tests/python/report.xml');
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
         expect(annotations).toStrictEqual([
             {
-                path: 'python/test_sample.py',
+                path: 'integration-tests/python/test_sample.py',
                 start_line: 10,
                 end_line: 10,
                 start_column: 0,
@@ -169,7 +169,7 @@ describe('parseFile', () => {
                     "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError"
             },
             {
-                path: 'python/test_sample.py',
+                path: 'integration-tests/python/test_sample.py',
                 start_line: 14,
                 end_line: 14,
                 start_column: 0,
@@ -183,14 +183,14 @@ describe('parseFile', () => {
         ]);
     });
     it('should parse go results', async () => {
-        const {count, skipped, annotations} = await parseFile('go/report.xml', true);
+        const {count, skipped, annotations} = await parseFile('integration-tests/go/report.xml', true);
 
         expect(count).toBe(3);
         expect(skipped).toBe(0);
         // noinspection RegExpRepeatedSpace
         expect(annotations).toStrictEqual([
             {
-                path: 'go/main_test.go',
+                path: 'integration-tests/go/main_test.go',
                 start_line: 12,
                 end_line: 12,
                 start_column: 0,
@@ -201,7 +201,7 @@ describe('parseFile', () => {
                 raw_details: 'main_test.go:12: failing test'
             },
             {
-                path: 'go/utils/string_test.go',
+                path: 'integration-tests/go/utils/string_test.go',
                 start_line: 7,
                 end_line: 7,
                 start_column: 0,
@@ -227,7 +227,7 @@ describe('parseFile', () => {
     });
     it('should parse custom report with details as an array', async () => {
         const { count, skipped, annotations } = await parseFile(
-            'custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'
+            'integration-tests/custom_reports/TEST-pro.taskana.common.api.ListUtilTest-H2.xml'
         );
 
         expect(count).toBe(1);
@@ -282,7 +282,7 @@ describe('parseFile', () => {
 
     it('should parse custom report with flaky failures', async () => {
         const { count, skipped, annotations } = await parseFile(
-            'custom_reports/TEST-test.MyIntegrationTestSuite.xml'
+            'integration-tests/custom_reports/TEST-test.MyIntegrationTestSuite.xml'
         );
 
         expect(count).toBe(5);

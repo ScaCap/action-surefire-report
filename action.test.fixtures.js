@@ -9,7 +9,7 @@ const finishedWithFailures = {
         annotations: [
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 39,
                 end_line: 39,
                 start_column: 0,
@@ -22,7 +22,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 49,
                 end_line: 49,
                 start_column: 0,
@@ -35,7 +35,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 57,
                 end_line: 57,
                 start_column: 0,
@@ -48,7 +48,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 18,
                 end_line: 18,
                 start_column: 0,
@@ -61,7 +61,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 32,
                 end_line: 32,
                 start_column: 0,
@@ -74,7 +74,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 25,
                 end_line: 25,
                 start_column: 0,
@@ -88,7 +88,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
+                    'integration-tests/maven/email/src/test/java/action/surefire/report/email/EmailAddressTest.java',
                 start_line: 66,
                 end_line: 66,
                 start_column: 0,
@@ -101,7 +101,7 @@ const finishedWithFailures = {
             },
             {
                 path:
-                    'tests/evil_twins/src/test/java/action/surefire/report/twin/second/TwinTest.java',
+                    'integration-tests/maven/evil_twins/src/test/java/action/surefire/report/twin/second/TwinTest.java',
                 start_line: 13,
                 end_line: 13,
                 start_column: 0,
@@ -113,7 +113,7 @@ const finishedWithFailures = {
                     "java.lang.AssertionError: \n\nExpected: \"Good Twin\"\n     but: was \"Evil Twin\"\n\tat action.surefire.report.twin.second.TwinTest.should_always_fail(TwinTest.java:13)"
             },
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
                 start_line: 27,
                 end_line: 27,
                 start_column: 0,
@@ -126,7 +126,7 @@ const finishedWithFailures = {
                     'java.lang.AssertionError: unexpected exception type thrown; expected:<java.lang.IllegalStateException> but was:<java.lang.IllegalArgumentException>\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)\nCaused by: java.lang.IllegalArgumentException: Amount must have max 2 non-zero decimal places\n\tat action.surefire.report.calc.CalcUtilsTest.scale(CalcUtilsTest.kt:31)\n\tat action.surefire.report.calc.CalcUtilsTest.access$scale(CalcUtilsTest.kt:9)\n\tat action.surefire.report.calc.CalcUtilsTest.test error handling(CalcUtilsTest.kt:27)'
             },
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',
                 start_line: 15,
                 end_line: 15,
                 start_column: 0,
@@ -138,7 +138,7 @@ const finishedWithFailures = {
                     'java.lang.AssertionError: \n\nExpected: <100.10>\n     but: was <100.11>\n\tat action.surefire.report.calc.CalcUtilsTest.test scale(CalcUtilsTest.kt:15)'
             },
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
                 start_line: 27,
                 end_line: 27,
                 start_column: 0,
@@ -151,7 +151,7 @@ const finishedWithFailures = {
                     'java.lang.AssertionError: \n\nExpected: (an instance of java.lang.IllegalArgumentException and exception with message a string containing "This is unexpected")\n     but: exception with message a string containing "This is unexpected" message was "Input=\'\' didn\'t match condition."\nStacktrace was: java.lang.IllegalArgumentException: Input=\'\' didn\'t match condition.\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:25)\n\tat action.surefire.report.calc.StringUtils.requireNotBlank(StringUtils.java:18)\n\tat action.surefire.report.calc.StringUtilsTest.require_fail(StringUtilsTest.java:27)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n\tat sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n\tat sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n\tat java.lang.reflect.Method.invoke(Method.java:498)\n\tat org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)\n\tat org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)\n\tat org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)\n\tat org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)\n\tat org.junit.rules.ExpectedException$ExpectedExceptionStatement.evaluate(ExpectedException.java:258)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)\n\tat org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)\n\tat org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)\n\tat org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)\n\tat org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)\n\tat org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)\n\tat org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)\n\tat org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)\n\tat org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)\n\tat org.junit.runners.ParentRunner.run(ParentRunner.java:413)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.execute(JUnit4Provider.java:365)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeWithRerun(JUnit4Provider.java:273)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.executeTestSet(JUnit4Provider.java:238)\n\tat org.apache.maven.surefire.junit4.JUnit4Provider.invoke(JUnit4Provider.java:159)\n\tat org.apache.maven.surefire.booter.ForkedBooter.invokeProviderInSameClassLoader(ForkedBooter.java:384)\n\tat org.apache.maven.surefire.booter.ForkedBooter.runSuitesInProcess(ForkedBooter.java:345)\n\tat org.apache.maven.surefire.booter.ForkedBooter.execute(ForkedBooter.java:126)\n\tat org.apache.maven.surefire.booter.ForkedBooter.main(ForkedBooter.java:418)'
             },
             {
-                path: 'tests/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
+                path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/StringUtilsTest.java',
                 start_line: 20,
                 end_line: 20,
                 start_column: 0,
