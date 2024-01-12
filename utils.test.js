@@ -164,7 +164,7 @@ describe('parseFile', () => {
                 title: 'test_sample.test_which_fails',
                 message: "AssertionError: assert 'test' == 'xyz'\n  - xyz\n  + test",
                 raw_details:
-                    "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\npython/test_sample.py:10: AssertionError"
+                    "def test_which_fails():\n        event = { 'attr': 'test'}\n>       assert event['attr'] == 'xyz'\nE       AssertionError: assert 'test' == 'xyz'\nE         - xyz\nE         + test\n\nintegration-tests/python/test_sample.py:10: AssertionError"
             },
             {
                 path: 'integration-tests/python/test_sample.py',
@@ -176,7 +176,7 @@ describe('parseFile', () => {
                 title: 'test_sample.test_with_error',
                 message: "AttributeError: 'dict' object has no attribute 'attr'",
                 raw_details:
-                    "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\npython/test_sample.py:14: AttributeError"
+                    "def test_with_error():\n        event = { 'attr': 'test'}\n>       assert event.attr == 'test'\nE       AttributeError: 'dict' object has no attribute 'attr'\n\nintegration-tests/python/test_sample.py:14: AttributeError"
             }
         ]);
     });
@@ -208,7 +208,7 @@ describe('parseFile', () => {
                 title: 'string_test.go.TestFailing',
                 message: 'Failed',
                 raw_details: expect.stringMatching(new RegExp(`string_test.go:7: 
-\\s*Error Trace:.*action-surefire-report/go/utils/string_test.go:7
+\\s*Error Trace:.*action-surefire-report/integration-tests/go/utils/string_test.go:7
 \\s*Error:     \\s*Not equal: 
 \\s*expected: "1"
 \\s*actual  : "2"
