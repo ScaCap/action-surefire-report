@@ -36505,24 +36505,24 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
     let filenameWithPackage;
     if (isFilenameInOutput) {
         filename = output.split(':')[0].trim();
-        filenameWithPackage = filename
+        filenameWithPackage = filename;
     } else {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
-        filenameWithPackage = classname.replace(/\./g, "/");
+        filenameWithPackage = classname.replace(/\./g, '/');
     }
     const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
-    if (!matches) return { filename: filename, filenameWithPackage: filenameWithPackage, line: 1 };
+    if (!matches) return {filename: filename, filenameWithPackage: filenameWithPackage, line: 1};
 
     const [lastItem] = matches.slice(-1);
     const [, line] = lastItem.split(':');
     core.debug(`Resolved file ${filenameWithPackage} with name ${filename} and line ${line}`);
 
-    return { filename, filenameWithPackage, line: parseInt(line) };
+    return {filename, filenameWithPackage, line: parseInt(line)};
 };
 
 const resolvePath = async filenameWithPackage => {
     core.debug(`Resolving path for ${filenameWithPackage}`);
-    const globber = await glob.create([`**/${filenameWithPackage}.*`, `**/${filenameWithPackage}`].join('\n'), { followSymbolicLinks: false });
+    const globber = await glob.create([`**/${filenameWithPackage}.*`, `**/${filenameWithPackage}`].join('\n'), {followSymbolicLinks: false});
     const results = await globber.glob();
     core.debug(`Matched files: ${results}`);
     const searchPath = globber.getSearchPaths()[0];
@@ -36545,6 +36545,19 @@ const resolvePath = async filenameWithPackage => {
     return canonicalPath;
 };
 
+function getTestsuites(report) {
+    if (report.testsuite) {
+        return [report.testsuite];
+    }
+    if (!report.testsuites || !report.testsuites.testsuite) {
+        return [];
+    }
+    if (Array.isArray(report.testsuites.testsuite)) {
+        return report.testsuites.testsuite;
+    }
+    return [report.testsuites.testsuite];
+}
+
 async function parseFile(file, isFilenameInStackTrace) {
     core.debug(`Parsing file ${file}`);
     let count = 0;
@@ -36553,15 +36566,11 @@ async function parseFile(file, isFilenameInStackTrace) {
 
     const data = await fs.promises.readFile(file);
 
-    const report = JSON.parse(parser.xml2json(data, { compact: true }));
-    core.debug(`parsed report: ${JSON.stringify(report)}`)
+    const report = JSON.parse(parser.xml2json(data, {compact: true}));
+    core.debug(`parsed report: ${JSON.stringify(report)}`);
 
-    const testsuites = report.testsuite
-        ? [report.testsuite]
-        : Array.isArray(report.testsuites.testsuite)
-            ? report.testsuites.testsuite
-            : [report.testsuites.testsuite];
-    core.debug(`test suites: ${JSON.stringify(testsuites)}`)
+    const testsuites = getTestsuites(report);
+    core.debug(`test suites: ${JSON.stringify(testsuites)}`);
 
     for (const testsuite of testsuites) {
         const testcases = Array.isArray(testsuite.testcase)
@@ -36598,7 +36607,7 @@ async function parseFile(file, isFilenameInStackTrace) {
                     testcase._attributes.name
                 ).trim();
 
-                const { filename, filenameWithPackage, line } = resolveFileAndLine(
+                const {filename, filenameWithPackage, line} = resolveFileAndLine(
                     testcase._attributes.file,
                     testcase._attributes.classname,
                     stackTrace,
@@ -36623,25 +36632,25 @@ async function parseFile(file, isFilenameInStackTrace) {
             }
         }
     }
-    return { count, skipped, annotations };
+    return {count, skipped, annotations};
 }
 
 const parseTestReports = async (reportPaths, isFilenameInStackTrace) => {
-    const globber = await glob.create(reportPaths, { followSymbolicLinks: false });
+    const globber = await glob.create(reportPaths, {followSymbolicLinks: false});
     let annotations = [];
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
-        const { count: c, skipped: s, annotations: a } = await parseFile(file, isFilenameInStackTrace);
+        const {count: c, skipped: s, annotations: a} = await parseFile(file, isFilenameInStackTrace);
         if (c === 0) continue;
         count += c;
         skipped += s;
         annotations = annotations.concat(a);
     }
-    return { count, skipped, annotations };
+    return {count, skipped, annotations};
 };
 
-module.exports = { resolveFileAndLine, resolvePath, parseFile, parseTestReports };
+module.exports = {resolveFileAndLine, resolvePath, parseFile, parseTestReports};
 
 
 /***/ }),
