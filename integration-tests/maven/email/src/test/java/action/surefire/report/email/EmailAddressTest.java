@@ -1,10 +1,8 @@
 package action.surefire.report.email;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.fail;
-
 import org.junit.Test;
+
+import static org.junit.Assert.fail;
 
 public class EmailAddressTest {
 

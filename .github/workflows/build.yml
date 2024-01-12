@@ -22,7 +22,7 @@ jobs:
           java-version: 8
           distribution: 'temurin'
           cache: 'maven'
-      - run: cd tests && mvn clean test --batch-mode -Dmaven.test.failure.ignore=true
+      - run: cd integration-tests/maven && mvn clean verify --batch-mode -Dmaven.test.failure.ignore=true
       - uses: ./
         if: github.ref != 'refs/heads/master'
         with:
@@ -30,17 +30,17 @@ jobs:
           report_paths: '**/surefire-reports/*.xml, **/failsafe-reports/*.xml'
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
-          args: pytest  --junit-xml=python/report.xml python/ || exit 0
+          args: pytest integration-tests/python/ --junit-xml=integration-tests/python/report.xml || exit 0
       - uses: ./
         if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Pytest Report
-          report_paths: python/report.xml
+          report_paths: integration-tests/python/report.xml
       - uses: actions/setup-go@v5
         with:
-          go-version: 1.18.x
+          go-version: 1.21.x
       - run: |
-          cd go && 
+          cd integration-tests/go && 
             go install github.com/jstemmer/go-junit-report/v2@latest &&
             go test -v 2>&1 ./... |
             go-junit-report -out report.xml
@@ -48,7 +48,7 @@ jobs:
         if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Go Report
-          report_paths: go/report.xml
+          report_paths: integration-tests/go/report.xml
           file_name_in_stack_trace: true
       - uses: actions/setup-node@v4
         with:
