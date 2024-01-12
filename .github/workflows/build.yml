@@ -27,6 +27,7 @@ jobs:
         if: github.ref != 'refs/heads/master'
         with:
           check_name: Example Surefire Test Report
+          report_paths: '**/surefire-reports/*.xml, **/failsafe-reports/*.xml'
       - uses: cclauss/GitHub-Action-for-pytest@0.5.0
         with:
           args: pytest  --junit-xml=python/report.xml python/ || exit 0
