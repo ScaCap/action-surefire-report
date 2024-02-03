@@ -39,7 +39,7 @@
     "xml-js": "1.6.11"
   },
   "devDependencies": {
-    "@octokit/fixtures": "22.0.6",
+    "@octokit/fixtures": "22.0.7",
     "@vercel/ncc": "0.38.1",
     "enzyme": "3.11.0",
     "eslint": "8.56.0",
