@@ -52,7 +52,7 @@ jobs:
           file_name_in_stack_trace: true
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           cache: npm
       - run: npm install
       - run: npm run eslint
