@@ -67,7 +67,7 @@ jobs:
       contents: read
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       - name: Build and Run Tests
         run: mvn test --batch-mode --fail-at-end
       - name: Publish Test Report
