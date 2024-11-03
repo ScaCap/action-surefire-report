@@ -2,7 +2,6 @@
   "name": "action-surefire-report",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "author": "Scalable Capital",
   "license": "Apache-2.0",
   "main": "index.js",
