@@ -15,11 +15,12 @@ const action = async () => {
     const commit = core.getInput('commit');
     const failOnFailedTests = core.getInput('fail_on_test_failures') === 'true';
     const failIfNoTests = core.getInput('fail_if_no_tests') === 'true';
+    const ignoreFlakyTests = core.getInput('ignore_flaky_tests') === 'true';
     const skipPublishing = core.getInput('skip_publishing') === 'true';
     const isFilenameInStackTrace = core.getInput('file_name_in_stack_trace') === 'true';
     const githubBaseUrl = core.getInput('github_base_url');
 
-    let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInStackTrace);
+    let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInStackTrace, ignoreFlakyTests);
     const foundResults = count > 0 || skipped > 0;
     const conclusion =
         (foundResults && annotations.length === 0) || (!foundResults && !failIfNoTests)

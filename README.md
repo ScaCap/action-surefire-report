@@ -33,6 +33,10 @@ Optional. Check will fail if there are test failures. The default is `false`.
 
 Optional. Check will fail if no tests were found. The default is `true`.
 
+### `ignore_flaky_tests`
+
+Optional. Set to `true` to consider flaky tests as success. The default is `false`.
+
 ### `skip_publishing`
 
 Optional. Skip the test report publishing (check run creation). The default is `false`.
