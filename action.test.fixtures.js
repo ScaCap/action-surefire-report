@@ -4,7 +4,7 @@ const finishedWithFailures = {
     status: 'completed',
     conclusion: 'failure',
     output: {
-        title: '19 tests run, 1 skipped, 12 failed.',
+        title: '20 tests run, 1 skipped, 13 failed.',
         summary: '',
         annotations: [
             {
@@ -111,6 +111,17 @@ const finishedWithFailures = {
                 message: "Expected: \"Good Twin\"\n     but: was \"Evil Twin\"",
                 raw_details:
                     "java.lang.AssertionError: \n\nExpected: \"Good Twin\"\n     but: was \"Evil Twin\"\n\tat action.surefire.report.twin.second.TwinTest.should_always_fail(TwinTest.java:13)"
+            },
+            {
+                path: 'integration-tests/maven/flakes/src/test/java/action/surefire/report/calc/AllOkWithFlakesTest.java',
+                start_line: 1,
+                end_line: 1,
+                start_column: 0,
+                end_column: 0,
+                annotation_level: 'failure',
+                title: 'AllOkWithFlakesTest.firstTryFailSecondTrySuccess',
+                message: 'firstTryFailSecondTrySuccess',
+                raw_details: ""
             },
             {
                 path: 'integration-tests/maven/utils/src/test/java/action/surefire/report/calc/CalcUtilsTest.kt',

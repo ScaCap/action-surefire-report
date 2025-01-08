@@ -13,6 +13,7 @@
         <module>utils</module>
         <module>email</module>
         <module>evil_twins</module>
+        <module>flakes</module>
     </modules>
 
     <properties>

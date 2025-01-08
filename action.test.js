@@ -107,6 +107,24 @@ describe('action should work', () => {
         expect(failed).toBeNull();
     });
 
+    it('should send all ok if tests were flaky and ignore_flaky_test is true', async () => {
+        inputs.report_paths = '**/surefire-reports/TEST-*AllOkWithFlakesTest.xml';
+        inputs.ignore_flaky_tests = 'true';
+        let request = null;
+        const scope = nock('https://api.github.com')
+            .post('/repos/scacap/action-surefire-report/check-runs', body => {
+                request = body;
+                return body;
+            })
+            .reply(200, {});
+        await action();
+        scope.done();
+
+        expect(request).toStrictEqual(finishedSuccess);
+        expect(outputs).toHaveProperty('conclusion', 'success');
+        expect(failed).toBeNull();
+    });
+
     it('should send failure if no test results were found', async () => {
         inputs.report_paths = '**/xxx/*.xml';
         let request = null;
@@ -191,7 +209,7 @@ describe('action should work', () => {
             await action();
             scope.done();
 
-            expect(failed).toBe('There were 12 failed tests');
+            expect(failed).toBe('There were 13 failed tests');
         });
     });
 

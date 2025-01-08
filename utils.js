@@ -62,7 +62,7 @@ function getTestsuites(report) {
     return [report.testsuites.testsuite];
 }
 
-async function parseFile(file, isFilenameInStackTrace) {
+async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
     core.debug(`Parsing file ${file}`);
     let count = 0;
     let skipped = 0;
@@ -85,7 +85,7 @@ async function parseFile(file, isFilenameInStackTrace) {
         for (const testcase of testcases) {
             count++;
             if (testcase.skipped) skipped++;
-            if (testcase.failure || testcase.flakyFailure || testcase.error) {
+            if (testcase.failure || (testcase.flakyFailure && !ignoreFlakyTests) || testcase.error) {
                 let testcaseData =
                     (testcase.failure && testcase.failure._cdata) ||
                     (testcase.failure && testcase.failure._text) ||
@@ -139,13 +139,13 @@ async function parseFile(file, isFilenameInStackTrace) {
     return {count, skipped, annotations};
 }
 
-const parseTestReports = async (reportPaths, isFilenameInStackTrace) => {
+const parseTestReports = async (reportPaths, isFilenameInStackTrace, ignoreFlakyTests) => {
     const globber = await glob.create(reportPaths, {followSymbolicLinks: false});
     let annotations = [];
     let count = 0;
     let skipped = 0;
     for await (const file of globber.globGenerator()) {
-        const {count: c, skipped: s, annotations: a} = await parseFile(file, isFilenameInStackTrace);
+        const {count: c, skipped: s, annotations: a} = await parseFile(file, isFilenameInStackTrace, ignoreFlakyTests);
         if (c === 0) continue;
         count += c;
         skipped += s;

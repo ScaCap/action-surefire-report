@@ -31,6 +31,10 @@ inputs:
     description: 'fail run if there were no test results found'
     required: false
     default: 'true'
+  ignore_flaky_tests:
+    description: 'consider flaky tests as success'
+    required: false
+    default: 'false'
   skip_publishing:
     description: 'skip test report publishing'
     required: false
