@@ -25,6 +25,7 @@ const action = async () => {
     const skipPublishing = core.getInput('skip_publishing') === 'true';
     const isFilenameInStackTrace = core.getInput('file_name_in_stack_trace') === 'true';
     const githubBaseUrl = core.getInput('github_base_url');
+    const summary = core.getInput('summary');
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInStackTrace, ignoreFlakyTests);
     const foundResults = count > 0 || skipped > 0;
@@ -65,7 +66,7 @@ const action = async () => {
                 conclusion,
                 output: {
                     title,
-                    summary: '',
+                    summary: summary,
                     annotations: annotations.slice(0, 50)
                 }
             };

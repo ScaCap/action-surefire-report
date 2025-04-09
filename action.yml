@@ -47,6 +47,10 @@ inputs:
     description: 'if you use Github Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3)'
     required: false
     default: ""
+  summary:
+    description: 'Optional custom summary text to display in the workflow run output'
+    required: false
+    default: ""
 
 outputs:
   outcome:
