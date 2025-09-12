@@ -77,6 +77,9 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
     core.debug(`test suites: ${JSON.stringify(testsuites)}`);
 
     for (const testsuite of testsuites) {
+        const module = testsuite.properties.property.find(
+            p => p._attributes.name === "infinispan.module-suffix"
+        )?._attributes.value;
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
@@ -119,11 +122,12 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
                 );
 
                 const path = await resolvePath(filenameWithPackage);
+                const pathWithModule = module ? `${module}:${path}` : path;
                 const title = `${filename}.${testcase._attributes.name}`;
-                core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+                core.info(`${pathWithModule}:${line} | ${message.replace(/\n/g, ' ')}`);
 
                 annotations.push({
-                    path,
+                    path: pathWithModule,
                     start_line: line,
                     end_line: line,
                     start_column: 0,
