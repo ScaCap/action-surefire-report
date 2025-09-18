@@ -37233,6 +37233,7 @@ module.exports = function(xml, userOptions) {
 /***/ 1252:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 const glob = __nccwpck_require__(8090);
 const core = __nccwpck_require__(2186);
 const fs = __nccwpck_require__(7147);
@@ -37312,9 +37313,13 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
     core.debug(`test suites: ${JSON.stringify(testsuites)}`);
 
     for (const testsuite of testsuites) {
-        const module = testsuite.properties.property.find(
+        module = testsuite?.properties?.property?.find(
             p => p._attributes.name === "infinispan.module-suffix"
         )?._attributes.value;
+        if (!module) {
+            const match = file.match(/\/([^/]+)\/target\//);
+            module = match ? match[1] : undefined;
+        }
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
@@ -37636,8 +37641,8 @@ module.exports = require("zlib");
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -37650,11 +37655,23 @@ module.exports = require("zlib");
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";

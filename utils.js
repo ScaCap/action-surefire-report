@@ -77,9 +77,13 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
     core.debug(`test suites: ${JSON.stringify(testsuites)}`);
 
     for (const testsuite of testsuites) {
-        const module = testsuite.properties.property.find(
+        module = testsuite?.properties?.property?.find(
             p => p._attributes.name === "infinispan.module-suffix"
         )?._attributes.value;
+        if (!module) {
+            const match = file.match(/\/([^/]+)\/target\//);
+            module = match ? match[1] : undefined;
+        }
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
