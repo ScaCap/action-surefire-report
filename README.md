@@ -53,6 +53,9 @@ Optional. Set to `true` to get the file name from the stack trace. The default i
 
 Optional: If you use GitHub Enterprise, you can set this to the URL of your server (e.g. https://github.myorg.com/api/v3).
 
+### `summary`
+
+Optional: Custom summary text to display in the workflow run output. Useful when generating reports in a separate workflow and linking back to the original test execution. Markdown is supported.
 
 ## Example usage
 
