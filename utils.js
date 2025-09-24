@@ -14,7 +14,8 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
         filenameWithPackage = classname.replace(/\./g, '/');
     }
-    const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
+    const escapedFilename = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const matches = output.match(new RegExp(`${escapedFilename}.*?:\\d+`, 'g'));
     if (!matches) return {filename: filename, filenameWithPackage: filenameWithPackage, line: 1};
 
     const [lastItem] = matches.slice(-1);
