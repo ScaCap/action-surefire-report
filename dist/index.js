@@ -25,6 +25,7 @@ const action = async () => {
     const skipPublishing = core.getInput('skip_publishing') === 'true';
     const isFilenameInStackTrace = core.getInput('file_name_in_stack_trace') === 'true';
     const githubBaseUrl = core.getInput('github_base_url');
+    const summary = core.getInput('summary');
 
     let { count, skipped, annotations } = await parseTestReports(reportPaths, isFilenameInStackTrace, ignoreFlakyTests);
     const foundResults = count > 0 || skipped > 0;
@@ -65,7 +66,7 @@ const action = async () => {
                 conclusion,
                 output: {
                     title,
-                    summary: '',
+                    summary: summary,
                     annotations: annotations.slice(0, 50)
                 }
             };
@@ -37232,6 +37233,7 @@ module.exports = function(xml, userOptions) {
 /***/ 1252:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
+/* module decorator */ module = __nccwpck_require__.nmd(module);
 const glob = __nccwpck_require__(8090);
 const core = __nccwpck_require__(2186);
 const fs = __nccwpck_require__(7147);
@@ -37248,7 +37250,8 @@ const resolveFileAndLine = (file, classname, output, isFilenameInOutput) => {
         filename = file ? file : classname.split('.').slice(-1)[0].split('(')[0];
         filenameWithPackage = classname.replace(/\./g, '/');
     }
-    const matches = output.match(new RegExp(`${filename}.*?:\\d+`, 'g'));
+    const escapedFilename = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const matches = output.match(new RegExp(`${escapedFilename}.*?:\\d+`, 'g'));
     if (!matches) return {filename: filename, filenameWithPackage: filenameWithPackage, line: 1};
 
     const [lastItem] = matches.slice(-1);
@@ -37311,6 +37314,13 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
     core.debug(`test suites: ${JSON.stringify(testsuites)}`);
 
     for (const testsuite of testsuites) {
+        module = testsuite?.properties?.property?.find(
+            p => p._attributes.name === "infinispan.module-suffix"
+        )?._attributes.value;
+        if (!module) {
+            const match = file.match(/\/([^/]+)\/target\//);
+            module = match ? match[1] : undefined;
+        }
         const testcases = Array.isArray(testsuite.testcase)
             ? testsuite.testcase
             : testsuite.testcase
@@ -37353,11 +37363,12 @@ async function parseFile(file, isFilenameInStackTrace, ignoreFlakyTests) {
                 );
 
                 const path = await resolvePath(filenameWithPackage);
+                const pathWithModule = module ? `${module}:${path}` : path;
                 const title = `${filename}.${testcase._attributes.name}`;
-                core.info(`${path}:${line} | ${message.replace(/\n/g, ' ')}`);
+                core.info(`${pathWithModule}:${line} | ${message.replace(/\n/g, ' ')}`);
 
                 annotations.push({
-                    path,
+                    path: pathWithModule,
                     start_line: line,
                     end_line: line,
                     start_column: 0,
@@ -37631,8 +37642,8 @@ module.exports = require("zlib");
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
+/******/ 			id: moduleId,
+/******/ 			loaded: false,
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -37645,11 +37656,23 @@ module.exports = require("zlib");
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
+/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/node module decorator */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.nmd = (module) => {
+/******/ 			module.paths = [];
+/******/ 			if (!module.children) module.children = [];
+/******/ 			return module;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
