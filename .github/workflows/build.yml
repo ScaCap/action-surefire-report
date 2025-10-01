@@ -50,7 +50,7 @@ jobs:
           check_name: Example Go Report
           report_paths: integration-tests/go/report.xml
           file_name_in_stack_trace: true
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
