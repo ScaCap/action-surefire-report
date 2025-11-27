@@ -36,7 +36,7 @@ jobs:
         with:
           check_name: Example Pytest Report
           report_paths: integration-tests/python/report.xml
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version: 1.21.x
       - run: |
