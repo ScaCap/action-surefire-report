@@ -53,5 +53,5 @@ outputs:
      description: 'the test outcome, either `success` or `failure`'
 
 runs:
-  using: 'node20'
+  using: 'node24'
   main: 'dist/index.js'
