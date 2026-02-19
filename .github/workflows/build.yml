@@ -52,7 +52,7 @@ jobs:
           file_name_in_stack_trace: true
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - uses: ScaCap/infra.gh-actions/ci/js/install-safe-chain@v1
       - run: npm install
