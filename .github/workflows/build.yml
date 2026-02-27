@@ -54,7 +54,10 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - uses: ScaCap/infra.gh-actions/ci/js/install-safe-chain@v1
+      - shell: bash
+        run: |
+          npm install -g @aikidosec/safe-chain@1.1.9 --engine-strict
+          safe-chain setup-ci
       - run: npm install
       - run: npm run eslint
       - run: npm run test
