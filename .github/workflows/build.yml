@@ -50,11 +50,11 @@ jobs:
           check_name: Example Go Report
           report_paths: integration-tests/go/report.xml
           file_name_in_stack_trace: true
-      - uses: ScaCap/infra.gh-actions/ci/aws/workflow-secrets@pre-release-PE-3446
+      - uses: ScaCap/infra.gh-actions/ci/aws/workflow-secrets@v1
         with:
           additional_cicd_secrets: |
             NEXUS_NPM_PASSWORD, arn:aws:secretsmanager:eu-central-1:397236901535:secret:prod/github-actions/base/NEXUS_DEV_USER_TOKEN_PASS
-      - uses: ScaCap/infra.gh-actions/ci/js/base@pre-release-PE-3446
+      - uses: ScaCap/infra.gh-actions/ci/js/base@v1
         env:
           NEXUS_NPM_USERNAME: ${{ vars.NEXUS_DEV_USER_TOKEN_NAME }}
         with:
