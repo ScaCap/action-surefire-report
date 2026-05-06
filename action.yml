@@ -1,5 +1,5 @@
-name: 'Surefire Report'
-description: 'Report Surefire test results as annotations on Github Pull Request [junit, failsafe]'
+name: '[DEPRECATED] Surefire Report'
+description: '[DEPRECATED] Legacy v1 line. Move to ScalableCapital/action-surefire-report@v2. Support ends after 2026-08-01.'
 branding:
   icon: 'check-square'
   color: 'green'
