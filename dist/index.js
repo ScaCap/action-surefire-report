@@ -66,7 +66,7 @@ const action = async () => {
                 conclusion,
                 output: {
                     title,
-                    summary: customSummary,
+                    summary: customSummary || '',
                     annotations: annotations.slice(0, 50)
                 }
             };
