@@ -1,5 +1,5 @@
-name: '[DEPRECATED] Surefire Report'
-description: '[DEPRECATED] Legacy v1 line. Move to ScalableCapital/action-surefire-report@v2. Support ends after 2026-08-01.'
+name: 'Surefire Report (Legacy v1)'
+description: 'Legacy v1 line. Active development moved to ScalableCapital/action-surefire-report@v2. Support ends after 2026-08-01.'
 branding:
   icon: 'check-square'
   color: 'green'

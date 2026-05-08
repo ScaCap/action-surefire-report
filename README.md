@@ -2,13 +2,12 @@
 
 ![](https://github.com/scacap/action-surefire-report/workflows/build/badge.svg)
 
-## ⚠️ Deprecation Warning
+## ⚠️ Moved to v2
 
 > [!WARNING]
-> `ScaCap/action-surefire-report@v1` is a legacy release line.
-> New development has moved to [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report).
-> New adopters should use `v2`, and existing `v1` users should plan their migration.
-> Support for the `v1` line will end after `2026-08-01`.
+> This repository now hosts the legacy `ScaCap/action-surefire-report@v1` line.
+> Active development and future releases have moved to [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report).
+> New adopters should use `v2`, and existing `v1` users should plan their migration before support ends on `2026-08-01`.
 
 ## Migrate To v2
 
