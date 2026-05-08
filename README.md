@@ -2,6 +2,8 @@
 
 ![](https://github.com/scacap/action-surefire-report/workflows/build/badge.svg)
 
+## ⚠️ Deprecation Warning
+
 > [!WARNING]
 > `ScaCap/action-surefire-report@v1` is a legacy release line.
 > New development has moved to [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report).
@@ -27,6 +29,8 @@ uses: ScalableCapital/action-surefire-report@v2
 
 The active release line, documentation, and ongoing maintenance now live in the `ScalableCapital` repository.
 This legacy `v1` line will stop receiving support after `2026-08-01`.
+
+---
 
 This action processes maven surefire or failsafe XML reports on pull requests and shows the result as a PR check with summary and annotations.
 
