@@ -9,9 +9,6 @@
 > Active development and future releases have moved to [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report).
 > New adopters should use `v2`, and existing `v1` users should plan their migration before support ends on `2026-08-01`.
 
-The active repository for version 2 is [`ScalableCapital/action-surefire-report`](https://github.com/ScalableCapital/action-surefire-report).
-Check the migration guide and the new features documented there before switching your workflows.
-
 Replace:
 
 ```yml
@@ -24,7 +21,7 @@ With:
 uses: ScalableCapital/action-surefire-report@v2
 ```
 
-The active release line, documentation, and ongoing maintenance now live in the `ScalableCapital` repository.
+The active release line, documentation, and ongoing maintenance now live in the [`ScalableCapital` repository]((https://github.com/ScalableCapital/action-surefire-report)).
 This legacy `v1` line will stop receiving support after `2026-08-01`.
 
 ---
