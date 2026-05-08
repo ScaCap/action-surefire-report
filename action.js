@@ -9,8 +9,8 @@ const { parseTestReports } = require('./utils.js');
 const action = async () => {
     core.warning(
         'Deprecated: ScaCap/action-surefire-report@v1 is a legacy release line. ' +
-        'Move to ScalableCapital/action-surefire-report@v2 at https://github.com/ScalableCapital/action-surefire-report. ' +
-        'Support ends after 2026-08-01.'
+        'Move to ScalableCapital/action-surefire-report@v2 at https://github.com/ScalableCapital/action-surefire-report - ' +
+        'support ends after 2026-08-01.'
     );
 
     const reportPaths = core.getInput('report_paths').split(',').join('\n');
