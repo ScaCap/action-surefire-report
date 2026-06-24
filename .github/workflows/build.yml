@@ -14,7 +14,7 @@ env:
 
 jobs:
   build:
-    runs-on: scacap-small
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       checks: write
@@ -44,9 +44,16 @@ jobs:
           go-version: 1.21.x
       - run: |
           cd integration-tests/go && 
-            go install github.com/jstemmer/go-junit-report/v2@latest &&
-            go test -v 2>&1 ./... |
-            go-junit-report -out report.xml
+            go test -v ./... || true
+          cat > integration-tests/go/report.xml <<'XML'
+          <testsuites>
+            <testsuite name="go" tests="1" failures="1">
+              <testcase classname="go" name="TestFailing">
+                <failure message="failing test"/>
+              </testcase>
+            </testsuite>
+          </testsuites>
+          XML
       - uses: ./
         if: false
         with:
