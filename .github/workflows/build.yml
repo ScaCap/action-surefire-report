@@ -9,6 +9,9 @@ concurrency:
   cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
   group: ${{ github.ref }}
 
+env:
+  GOPROXY: https://nexus.prod-cicd.scalable.capital/repository/go-public/
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,7 +42,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.21.x
-      - uses: ScaCap/infra.gh-actions/ci/nexus/configure@v1
       - run: |
           cd integration-tests/go && 
             go install github.com/jstemmer/go-junit-report/v2@latest &&
