@@ -47,9 +47,25 @@ jobs:
             go test -v ./... || true
           cat > report.xml <<'XML'
           <testsuites>
-            <testsuite name="go" tests="1" failures="1">
-              <testcase classname="go" name="TestFailing">
-                <failure message="failing test"/>
+            <testsuite name="go" tests="3" failures="2">
+              <testcase classname="main_test.go" name="TestPassing"/>
+              <testcase classname="main_test.go" name="TestFailing">
+                <failure message="Failed">main_test.go:12: failing test</failure>
+              </testcase>
+              <testcase classname="string_test.go" name="TestFailing">
+                <failure message="Failed"><![CDATA[string_test.go:7:
+                    Error Trace:    /home/runner/work/action-surefire-report/action-surefire-report/integration-tests/go/utils/string_test.go:7
+                    Error:          Not equal:
+                    expected: "1"
+                    actual  : "2"
+
+                    Diff:
+                    --- Expected
+                    +++ Actual
+                    @@ -1 +1 @@
+                    -1
+                    +2
+                    Test:           TestFailing]]></failure>
               </testcase>
             </testsuite>
           </testsuites>
