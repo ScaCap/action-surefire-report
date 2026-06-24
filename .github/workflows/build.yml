@@ -45,7 +45,7 @@ jobs:
       - run: |
           cd integration-tests/go && 
             go test -v ./... || true
-          cat > integration-tests/go/report.xml <<'XML'
+          cat > report.xml <<'XML'
           <testsuites>
             <testsuite name="go" tests="1" failures="1">
               <testcase classname="go" name="TestFailing">
