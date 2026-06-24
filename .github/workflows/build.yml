@@ -53,7 +53,7 @@ jobs:
                 <failure message="Failed">main_test.go:12: failing test</failure>
               </testcase>
               <testcase classname="string_test.go" name="TestFailing">
-                <failure message="Failed">string_test.go:7:
+                <failure message="Failed">string_test.go:7:&#32;
                     Error Trace:    /home/runner/work/action-surefire-report/action-surefire-report/integration-tests/go/utils/string_test.go:7
                     Error:          Not equal:&#32;
                     expected: "1"
