@@ -90,7 +90,7 @@ describe('action should work', () => {
         expect(failed).toBeNull();
     });
 
-    it('should emit a deprecation warning for the legacy v1 action line', async () => {
+    it('should emit a full deprecation warning for the legacy v1 action line', async () => {
         const scope = nock('https://api.github.com')
             .post('/repos/scacap/action-surefire-report/check-runs')
             .reply(200, {});
@@ -99,9 +99,8 @@ describe('action should work', () => {
         scope.done();
 
         expect(core.warning).toHaveBeenCalledWith(
-            'Deprecated: ScaCap/action-surefire-report@v1 is a legacy release line. ' +
-            'Move to ScalableCapital/action-surefire-report@v2 at https://github.com/ScalableCapital/action-surefire-report - ' +
-            'support ends after 2026-08-01.'
+            'Fully deprecated: ScaCap/action-surefire-report@v1 is no longer supported and will receive no further updates. ' +
+            'Move to ScalableCapital/action-surefire-report@v2: https://github.com/ScalableCapital/action-surefire-report.'
         );
     });
 

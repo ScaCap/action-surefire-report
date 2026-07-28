@@ -2,12 +2,11 @@
 
 ![](https://github.com/scacap/action-surefire-report/workflows/build/badge.svg)
 
-## ⚠️ Moved to v2
+## ⚠️ Fully deprecated
 
 > [!WARNING]
-> This repository now hosts the legacy `ScaCap/action-surefire-report@v1` line.
-> Active development and future releases have moved to [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report).
-> New adopters should use `v2`, and existing `v1` users should plan their migration before support ends on `2026-08-01`.
+> `ScaCap/action-surefire-report@v1` is fully deprecated and is no longer supported. It will receive no further updates or fixes.
+> Use [`ScalableCapital/action-surefire-report@v2`](https://github.com/ScalableCapital/action-surefire-report) instead.
 
 Replace:
 
@@ -21,8 +20,7 @@ With:
 uses: ScalableCapital/action-surefire-report@v2
 ```
 
-The active release line, documentation, and ongoing maintenance now live in the [`ScalableCapital` repository]((https://github.com/ScalableCapital/action-surefire-report)).
-This legacy `v1` line will stop receiving support after `2026-08-01`.
+The active release line, documentation, and ongoing maintenance live in the [`ScalableCapital` repository](https://github.com/ScalableCapital/action-surefire-report).
 
 ---
 
